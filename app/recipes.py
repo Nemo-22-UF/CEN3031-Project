@@ -11,10 +11,10 @@ SAMPLE_RECIPES = {
         "title": "Simple Scrambled Eggs",
         "base_servings": 1,
         "ingredients": [
-            "2 eggs",
-            "1 tbsp butter",
-            "1 tbsp milk",
-            "Salt and pepper",
+            {"quantity": 2, "unit": "", "name": "eggs"},
+            {"quantity": 1, "unit": "tbsp", "name": "butter"},
+            {"quantity": 1, "unit": "tbsp", "name": "milk"},
+            {"quantity": None, "unit": "", "name": "Salt and pepper, to taste"},
         ],
         "steps": [
             "Crack the eggs into a bowl, add the milk, and whisk until no streaks of white remain.",
