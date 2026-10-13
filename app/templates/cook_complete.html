@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Done: {{ recipe.title }}{% endblock %}
+{% block content %}
+<section class="cook cook-done">
+    <h1>You made {{ recipe.title }}!</h1>
+    <p>Nice work. You finished all {{ recipe.steps | length }} steps.</p>
+
+    <div class="cook-nav">
+        <a class="button button-secondary" href="{{ url_for('main.cook', recipe_id=recipe.id, step=1) }}">Cook it again</a>
+        <a class="button" href="{{ url_for('main.index') }}">Back to home</a>
+    </div>
+</section>
+{% endblock %}
