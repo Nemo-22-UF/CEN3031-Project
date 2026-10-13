@@ -12,15 +12,40 @@
 
     <p class="cook-step">{{ instruction }}</p>
 
+    <div class="cook-ingredients">
+        <form class="servings-form" method="get" action="{{ url_for('main.cook', recipe_id=recipe.id) }}">
+            <input type="hidden" name="step" value="{{ step }}">
+            <label for="servings">Servings</label>
+            <input id="servings" name="servings" type="number" min="{{ min_servings }}" max="{{ max_servings }}"
+                   value="{{ servings }}" required>
+            <button class="button button-secondary" type="submit">Update</button>
+        </form>
+        {% if servings_error %}
+        <p class="servings-error" role="alert">{{ servings_error }}</p>
+        {% endif %}
+
+        <h2>Ingredients for {{ servings }} serving{{ "s" if servings != 1 }}</h2>
+        <ul>
+            {% for ingredient in ingredients %}
+            <li>
+                {%- if ingredient.quantity is not none -%}
+                <strong>{{ format_quantity(ingredient.quantity) }}{% if ingredient.unit %} {{ ingredient.unit }}{% endif %}</strong>
+                {% endif -%}
+                {{ ingredient.name }}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
     <div class="cook-nav">
         {% if step > 1 %}
-        <a class="button button-secondary" href="{{ url_for('main.cook', recipe_id=recipe.id, step=step - 1) }}">Back</a>
+        <a class="button button-secondary" href="{{ url_for('main.cook', recipe_id=recipe.id, step=step - 1, servings=servings) }}">Back</a>
         {% else %}
         <span class="button button-secondary is-disabled" aria-disabled="true">Back</span>
         {% endif %}
 
         {% if step < total_steps %}
-        <a class="button" href="{{ url_for('main.cook', recipe_id=recipe.id, step=step + 1) }}">Next step</a>
+        <a class="button" href="{{ url_for('main.cook', recipe_id=recipe.id, step=step + 1, servings=servings) }}">Next step</a>
         {% else %}
         <a class="button" href="{{ url_for('main.cook_complete', recipe_id=recipe.id) }}">Finish cooking</a>
         {% endif %}
