@@ -3,3 +3,67 @@ body {
     margin: 0;
     padding: 1rem;
 }
+
+/* Guided cooking */
+
+.cook {
+    max-width: 40rem;
+    margin: 2rem auto;
+}
+
+.cook-recipe {
+    margin: 0 0 0.5rem;
+    color: #555;
+    font-weight: 600;
+}
+
+.cook-progress-label {
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.cook-progress {
+    height: 0.5rem;
+    background: #e5e5e5;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.cook-progress-fill {
+    height: 100%;
+    background: #2f7d4f;
+}
+
+.cook-step {
+    margin: 2rem 0;
+    font-size: 1.5rem;
+    line-height: 1.4;
+}
+
+.cook-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.button {
+    display: inline-block;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    border: 1px solid #2f7d4f;
+    background: #2f7d4f;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.button-secondary {
+    background: #fff;
+    color: #2f7d4f;
+}
+
+.button.is-disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
