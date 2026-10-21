@@ -1,15 +1,3 @@
-import pytest
-
-from app import create_app
-
-
-@pytest.fixture
-def client():
-    app = create_app()
-    app.config["TESTING"] = True
-    return app.test_client()
-
-
 def test_cook_page_starts_on_first_step(client):
     response = client.get("/recipes/1/cook")
     html = response.get_data(as_text=True)

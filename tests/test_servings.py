@@ -2,15 +2,7 @@ from fractions import Fraction
 
 import pytest
 
-from app import create_app
 from app.servings import format_quantity, parse_servings, scale_ingredients
-
-
-@pytest.fixture
-def client():
-    app = create_app()
-    app.config["TESTING"] = True
-    return app.test_client()
 
 
 INGREDIENTS = [
