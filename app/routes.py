@@ -26,7 +26,7 @@ def recipe_detail(recipe_id):
     recipe = get_recipe(recipe_id)
     if recipe is None:
         abort(404)
-    return render_template("recipe_detail.html", recipe=recipe)
+    return render_template("recipe_detail.html", recipe=recipe, format_quantity=format_quantity)
 
 
 @main.route("/recipes/<int:recipe_id>/cook")
