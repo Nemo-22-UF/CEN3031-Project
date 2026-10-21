@@ -31,3 +31,8 @@ SAMPLE_RECIPES = {
 def get_recipe(recipe_id):
     """Return the recipe with this id, or None if it doesn't exist."""
     return SAMPLE_RECIPES.get(recipe_id)
+
+    
+
+def get_all_recipes():
+    return list(SAMPLE_RECIPES.values())

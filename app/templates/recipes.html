@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Recipes{% endblock %}
+
+{% block content %}
+<section class="recipes">
+    <h1>Recipes</h1>
+
+    {% if recipes %}
+    <ul class="recipe-list">
+        {% for recipe in recipes %}
+        <li class="recipe-card">
+            <a href="{{ url_for('main.recipe_detail', recipe_id=recipe.id) }}">{{ recipe.title }}</a>
+            <p>{{ recipe.steps | length }} steps · Serves {{ recipe.base_servings }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No recipes yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

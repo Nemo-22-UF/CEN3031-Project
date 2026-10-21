@@ -1,6 +1,11 @@
 {% extends "base.html" %}
+
 {% block title %}Home{% endblock %}
+
 {% block content %}
-<h1>Cooking App</h1>
-<p>Project setup complete.</p>
+<section class="home">
+    <h1>Skill-It</h1>
+    <p>Learn to cook one recipe at a time.</p>
+    <a class="button" href="{{ url_for('main.recipes') }}">Browse recipes</a>
+</section>
 {% endblock %}
