@@ -1,6 +1,6 @@
 from flask import Blueprint, abort, redirect, render_template, request, url_for
 
-from app.recipes import get_recipe
+from app.recipes import get_all_recipes, get_recipe
 
 main = Blueprint("main", __name__)
 
@@ -13,6 +13,19 @@ def index():
 @main.route("/health")
 def health():
     return {"status": "ok"}
+
+
+@main.route("/recipes")
+def recipes():
+    return render_template("recipes.html", recipes=get_all_recipes())
+
+
+@main.route("/recipes/<int:recipe_id>")
+def recipe_detail(recipe_id):
+    recipe = get_recipe(recipe_id)
+    if recipe is None:
+        abort(404)
+    return render_template("recipe_detail.html", recipe=recipe)
 
 
 @main.route("/recipes/<int:recipe_id>/cook")
