@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Cooking: {{ recipe.title }}{% endblock %}
+{% block content %}
+<section class="cook">
+    <p class="cook-recipe">{{ recipe.title }}</p>
+
+    <p class="cook-progress-label" id="step-label">Step {{ step }} of {{ total_steps }}</p>
+    <div class="cook-progress" role="progressbar" aria-labelledby="step-label"
+         aria-valuemin="1" aria-valuemax="{{ total_steps }}" aria-valuenow="{{ step }}">
+        <div class="cook-progress-fill" style="width: {{ (step / total_steps * 100) | round | int }}%"></div>
+    </div>
+
+    <p class="cook-step">{{ instruction }}</p>
+
+    <div class="cook-nav">
+        {% if step > 1 %}
+        <a class="button button-secondary" href="{{ url_for('main.cook', recipe_id=recipe.id, step=step - 1) }}">Back</a>
+        {% else %}
+        <span class="button button-secondary is-disabled" aria-disabled="true">Back</span>
+        {% endif %}
+
+        {% if step < total_steps %}
+        <a class="button" href="{{ url_for('main.cook', recipe_id=recipe.id, step=step + 1) }}">Next step</a>
+        {% else %}
+        <a class="button" href="{{ url_for('main.cook_complete', recipe_id=recipe.id) }}">Finish cooking</a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
