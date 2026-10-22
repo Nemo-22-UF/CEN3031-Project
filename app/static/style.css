@@ -67,3 +67,45 @@ body {
     opacity: 0.4;
     pointer-events: none;
 }
+
+/* Serving scaling */
+
+.cook-ingredients {
+    margin: 2rem 0;
+    padding: 1rem 1.25rem;
+    border: 1px solid #e5e5e5;
+    border-radius: 0.5rem;
+}
+
+.cook-ingredients h2 {
+    margin: 1rem 0 0.5rem;
+    font-size: 1rem;
+}
+
+.cook-ingredients ul {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.servings-form {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.servings-form input {
+    width: 4rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+
+.servings-form .button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.servings-error {
+    margin: 0.5rem 0 0;
+    color: #b3261e;
+}

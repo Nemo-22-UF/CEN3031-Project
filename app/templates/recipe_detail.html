@@ -11,7 +11,7 @@
     <h2>Ingredients</h2>
     <ul>
         {% for ingredient in recipe.ingredients %}
-        <li>{{ ingredient }}</li>
+        <li>{% if ingredient.quantity is not none %}{{ format_quantity(ingredient.quantity) }}{% if ingredient.unit %} {{ ingredient.unit }}{% endif %} {% endif %}{{ ingredient.name }}</li>
         {% endfor %}
     </ul>
 
