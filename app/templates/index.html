@@ -3,4 +3,13 @@
 {% block content %}
 <h1>Cooking App</h1>
 <p>Project setup complete.</p>
+<section id="cooking-timer">
+    <h2>Cooking Timer</h2>
+    <h1 id="timer-display">05:00</h1>
+
+    <button id="timer-start">Start</button>
+    <button id="timer-pause">Pause</button>
+    <button id="timer-reset">Reset</button>
+</section>
+<script src="{{ url_for('static', filename='Timer.js') }}" defer></script>
 {% endblock %}
