@@ -4,24 +4,38 @@
 
 {% block content %}
 <section class="recipe-detail">
-    <p><a href="{{ url_for('main.recipes') }}">← All recipes</a></p>
+    <a class="back-link" href="{{ url_for('main.recipes') }}">← All recipes</a>
+
     <h1>{{ recipe.title }}</h1>
-    <p>Serves {{ recipe.base_servings }}</p>
+    <div class="badges">
+        <span class="badge">{{ recipe.steps | length }} steps</span>
+        <span class="badge">{{ recipe.ingredients | length }} ingredients</span>
+        <span class="badge">Serves {{ recipe.base_servings }}</span>
+    </div>
 
-    <h2>Ingredients</h2>
-    <ul>
-        {% for ingredient in recipe.ingredients %}
-        <li>{% if ingredient.quantity is not none %}{{ format_quantity(ingredient.quantity) }}{% if ingredient.unit %} {{ ingredient.unit }}{% endif %} {% endif %}{{ ingredient.name }}</li>
-        {% endfor %}
-    </ul>
+    <div class="detail-box">
+        <h2>Ingredients</h2>
+        <ul class="ingredient-list">
+            {% for ingredient in recipe.ingredients %}
+            <li>
+                <label>
+                    <input type="checkbox">
+                    <span>{% if ingredient.quantity is not none %}{{ format_quantity(ingredient.quantity) }}{% if ingredient.unit %} {{ ingredient.unit }}{% endif %} {% endif %}{{ ingredient.name }}</span>
+                </label>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 
-    <h2>Steps</h2>
-    <ol>
-        {% for step in recipe.steps %}
-        <li>{{ step }}</li>
-        {% endfor %}
-    </ol>
+    <div class="detail-box">
+        <h2>Steps</h2>
+        <ol class="step-list">
+            {% for step in recipe.steps %}
+            <li>{{ step }}</li>
+            {% endfor %}
+        </ol>
+    </div>
 
-    <a class="button" href="{{ url_for('main.cook', recipe_id=recipe.id, step=1) }}">Start cooking</a>
+    <a class="button button-large" href="{{ url_for('main.cook', recipe_id=recipe.id, step=1) }}">Start cooking</a>
 </section>
 {% endblock %}
