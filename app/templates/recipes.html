@@ -5,13 +5,21 @@
 {% block content %}
 <section class="recipes">
     <h1>Recipes</h1>
+    <p class="recipes-intro">Pick a recipe and we'll walk you through it step by step.</p>
 
     {% if recipes %}
-    <ul class="recipe-list">
+    <ul class="recipe-grid">
         {% for recipe in recipes %}
-        <li class="recipe-card">
-            <a href="{{ url_for('main.recipe_detail', recipe_id=recipe.id) }}">{{ recipe.title }}</a>
-            <p>{{ recipe.steps | length }} steps · Serves {{ recipe.base_servings }}</p>
+        <li>
+            <a class="recipe-card" href="{{ url_for('main.recipe_detail', recipe_id=recipe.id) }}">
+                <h2 class="recipe-card-title">{{ recipe.title }}</h2>
+                <div class="badges">
+                    <span class="badge">{{ recipe.steps | length }} steps</span>
+                    <span class="badge">{{ recipe.ingredients | length }} ingredients</span>
+                    <span class="badge">Serves {{ recipe.base_servings }}</span>
+                </div>
+                <span class="recipe-card-cta">View recipe →</span>
+            </a>
         </li>
         {% endfor %}
     </ul>
