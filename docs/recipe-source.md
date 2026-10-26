@@ -32,7 +32,7 @@ supporter feature. We can still collect every recipe with free endpoints
 - 175 recipes list the same ingredient twice.
 - 768 recipes have line-separated instructions that split cleanly into steps.
 - 232 recipes fit our models with no changes.
-- About 25 measures contain broken characters (e.g. "� tsp").
+- About 25 measures contain broken characters (e.g. "1/2 tsp").
 
 ## Field mapping
 | Our model field                 | TheMealDB field                 | Notes |
