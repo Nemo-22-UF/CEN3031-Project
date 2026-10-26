@@ -109,3 +109,235 @@ body {
     margin: 0.5rem 0 0;
     color: #b3261e;
 }
+
+body{
+    font-family: system-ui, sans-serif;
+    margin: 0;
+    padding: 1rem;
+}
+/* Guided cooking */
+.cook{
+    max-width: 40rem;
+    margin: 2rem auto;
+}
+.cook-recipe{
+    margin: 0 0 0.5rem;
+    color: #555;
+    font-weight: 600;
+}
+.cook-progress-label{
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+.cook-progress{
+    height: 0.5rem;
+    background: #e5e5e5;
+    border-radius: 999px;
+    overflow: hidden;
+}
+.cook-progress-fill{
+    height: 100%;
+    background: #2f7d4f;
+}
+.cook-step{
+    margin: 2rem 0;
+    font-size: 1.5rem;
+    line-height: 1.4;
+}
+.cook-nav{
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+.button{
+    display: inline-block;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    border: 1px solid #2f7d4f;
+    background: #2f7d4f;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+}
+.button-secondary{
+    background: #fff;
+    color: #2f7d4f;
+}
+.button.is-disabled{
+    opacity: 0.4;
+    pointer-events: none;
+}
+/* Serving scaling */
+.cook-ingredients{
+    margin: 2rem 0;
+    padding: 1rem 1.25rem;
+    border: 1px solid #e5e5e5;
+    border-radius: 0.5rem;
+}
+.cook-ingredients h2{
+    margin: 1rem 0 0.5rem;
+    font-size: 1rem;
+}
+.cook-ingredients ul{
+    margin: 0;
+    padding-left: 1.25rem;
+}
+.servings-form{
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.servings-form input{
+    width: 4rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+.servings-form .button{
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+.servings-error{
+    margin: 0.5rem 0 0;
+    color: #b3261e;
+}
+/* Receipe browser */
+.recipes {
+    max-width: 60rem;
+    margin: 2rem auto;
+}
+.recipes-intro{
+    color: #555;
+    margin: 0 0 1.5rem;
+}
+.recipe-grid{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1rem;
+}
+.recipe-card{
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    height: 100%;
+    padding: 1.25rem;
+    border: 2px solid #e5e5e5;
+    border-bottom-width: 4px;
+    border-radius: 1rem;
+    background: #fff;
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.15s, transform 0.15s;
+}
+.recipe-card:hover{
+    border-color: #2f7d4f;
+    transform: translateY(-2px);
+}
+.recipe-card-title{
+    margin: 0;
+    font-size: 1.25rem;
+}
+.recipe-card-cta{
+    margin-top: auto;
+    font-weight: 600;
+    color: #2f7d4f;
+}
+.badges{
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.badge{
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    background: #e8f3ec;
+    color: #2f7d4f;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+/* Recipe detail */
+.detail-box{
+    max-width: 40rem;
+    margin: 2rem auto;
+}
+.recipe-detail h1{
+    margin: 0 0 0.75rem;
+}
+.back-link{
+    color: #2f7d4f;
+    font-weight: 600;
+    text-decoration: none;
+}
+.detail-box{
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+    border: 2px solid #e5e5e5;
+    border-bottom-width: 4px;
+    border-radius: 1rem;
+}
+.detail-box h2{
+    margin: 0 0 1rem;
+    font-size: 1.15rem;
+}
+.ingredient-list{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.ingredient-list li + li{
+    margin-top: 0.6rem;
+}
+.ingredient-list label{
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+}
+.ingredient-list input{
+    width: 1.2rem;
+    height: 1.2rem;
+    accent-color: #2f7d4f;
+}
+.ingredient-list input:checked + span{
+    color: #999;
+    text-decoration: line-through;
+}
+.step-list{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: step;
+}
+.step-list li{
+    counter-increment: step;
+    display: flex;
+    gap: 0.75rem;
+    line-height: 1.5;
+}
+.step-list li + li{
+    margin-top: 0.9rem;
+}
+.step-list li::before{
+    content: counter(step);
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: #2f7d4f;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.button-large{
+    display: block;
+    text-align: center;
+    padding: 1rem;
+    font-size: 1.1rem;
+}

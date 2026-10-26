@@ -22,3 +22,9 @@ def test_recipe_detail_shows_ingredients_and_steps(client):
 
 def test_unknown_recipe_detail_returns_404(client):
     assert client.get("/recipes/999").status_code == 404
+
+def test_recipes_page_shows_every_recipe(client):
+    html = client.get("/recipes").get_data(as_text=True)
+    assert "Simple Scrambled Eggs" in html
+    assert "Garlic Butter Pasta" in html
+    assert "Avocado Toast" in html
