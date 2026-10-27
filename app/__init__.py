@@ -24,6 +24,10 @@ def create_app(config_class=Config):
         from app import models
         db.create_all()
 
+        if app.config.get("SEED_SAMPLE_RECIPES"):
+            from app.recipes import seed_sample_recipes
+            seed_sample_recipes()
+
     from app.routes import main
     app.register_blueprint(main)
 
