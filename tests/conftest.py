@@ -11,4 +11,8 @@ def app():
 
 @pytest.fixture
 def client(app):
+    from app.recipes import seed_sample_recipes
+
+    with app.app_context():
+        seed_sample_recipes()
     return app.test_client()
