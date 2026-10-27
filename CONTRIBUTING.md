@@ -10,6 +10,7 @@ source venv/bin/activate     # macOS/Linux
 pip install -r requirements.txt
 copy .env.example .env       # Windows
 cp .env.example .env         # macOS/Linux
+flask --app run import-recipes   # one-time: load recipes from TheMealDB (~30 seconds)
 python run.py
 ```
 Open http://127.0.0.1:5000

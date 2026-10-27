@@ -27,4 +27,7 @@ def create_app(config_class=Config):
     from app.routes import main
     app.register_blueprint(main)
 
+    from app.importer import import_recipes_command
+    app.cli.add_command(import_recipes_command)
+
     return app
