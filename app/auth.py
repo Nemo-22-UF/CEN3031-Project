@@ -74,7 +74,7 @@ def profile():
 @auth.route("/admin")
 @admin_required
 def admin():
-    # The admin tools themselves come later (PBI-15). This page proves the gate works.
+    # The admin tools themselves come later (PBI-17 and PBI-18). This page proves the gate works.
     return render_template("admin.html")
 
 
