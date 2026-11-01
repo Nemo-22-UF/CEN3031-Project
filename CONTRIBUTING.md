@@ -11,9 +11,12 @@ pip install -r requirements.txt
 copy .env.example .env       # Windows
 cp .env.example .env         # macOS/Linux
 flask --app run import-recipes   # one-time: load recipes from TheMealDB (~30 seconds)
+flask --app run create-user <name> --admin   # optional: make an account to log in with
 python run.py
 ```
 Open http://127.0.0.1:5000
+
+If you already had an `app.db` from before login was added, delete it and run the steps above again so the users table gets the new password columns.
 
 ## Workflow
 1. `main` is always runnable. Nobody pushes directly to it.

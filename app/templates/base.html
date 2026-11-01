@@ -9,8 +9,17 @@
 <body>
     <nav>
         <a href="{{ url_for('main.index') }}">Home</a>
+        {% if current_user.is_authenticated %}
+        {% if current_user.is_admin %}<a href="{{ url_for('auth.admin') }}">Admin</a>{% endif %}
+        <a href="{{ url_for('auth.profile') }}">{{ current_user.username }}</a>
+        {% else %}
+        <a href="{{ url_for('auth.login') }}">Log in</a>
+        {% endif %}
     </nav>
     <main>
+        {% for message in get_flashed_messages() %}
+        <p class="flash">{{ message }}</p>
+        {% endfor %}
         {% block content %}{% endblock %}
     </main>
     <script src="{{ url_for('static', filename='main.js') }}"></script>
