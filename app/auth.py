@@ -1,14 +1,20 @@
 from functools import wraps
 
+import re
+
 import click
 from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
 from flask.cli import with_appcontext
 from flask_login import current_user, login_required, login_user, logout_user
+from sqlalchemy import func
 
 from app import db, login_manager
 from app.models import User
 
 auth = Blueprint("auth", __name__)
+
+USERNAME_PATTERN = re.compile(r"^[A-Za-z0-9_]{3,30}$")
+MIN_PASSWORD_LENGTH = 8
 
 
 @login_manager.user_loader
@@ -55,6 +61,49 @@ def login():
             return redirect(safe_next(request.args.get("next")))
 
     return render_template("login.html", error=error, username=username), (400 if error else 200)
+
+
+def registration_error(username, password, confirm):
+    """Return a message explaining what's wrong with the form, or None if it's valid."""
+    if not username or not password or not confirm:
+        return "Fill in every field."
+    if not USERNAME_PATTERN.match(username):
+        return "Usernames are 3 to 30 characters: letters, numbers and underscores only."
+    if len(password) < MIN_PASSWORD_LENGTH:
+        return f"Passwords need at least {MIN_PASSWORD_LENGTH} characters."
+    if password != confirm:
+        return "The passwords don't match."
+    # Treat "Max" and "max" as the same name so people can't be confused for each other.
+    if User.query.filter(func.lower(User.username) == username.lower()).first():
+        return "That username is taken. Try another one."
+    return None
+
+
+@auth.route("/register", methods=["GET", "POST"])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for("auth.profile"))
+
+    error = None
+    username = ""
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
+        confirm = request.form.get("confirm", "")
+        error = registration_error(username, password, confirm)
+
+        if error is None:
+            user = User(username=username)
+            user.set_password(password)
+            db.session.add(user)
+            db.session.commit()
+            login_user(user)
+            flash(f"Welcome to Skill-It, {user.username}!")
+            return redirect(url_for("auth.profile"))
+
+    return render_template(
+        "register.html", error=error, username=username, min_password_length=MIN_PASSWORD_LENGTH
+    ), (400 if error else 200)
 
 
 @auth.route("/logout", methods=["POST"])
