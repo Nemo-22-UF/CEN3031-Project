@@ -1,7 +1,14 @@
 from flask import Blueprint, abort, redirect, render_template, request, url_for
 
 from app.recipes import get_all_recipes, get_recipe
-from app.servings import MAX_SERVINGS, MIN_SERVINGS, format_quantity, parse_servings, scale_ingredients
+from app.servings import (
+    MAX_SERVINGS,
+    MIN_SERVINGS,
+    format_quantity,
+    format_unit,
+    parse_servings,
+    scale_ingredients,
+)
 
 main = Blueprint("main", __name__)
 
@@ -26,7 +33,9 @@ def recipe_detail(recipe_id):
     recipe = get_recipe(recipe_id)
     if recipe is None:
         abort(404)
-    return render_template("recipe_detail.html", recipe=recipe, format_quantity=format_quantity)
+    return render_template(
+        "recipe_detail.html", recipe=recipe, format_quantity=format_quantity, format_unit=format_unit
+    )
 
 
 @main.route("/recipes/<int:recipe_id>/cook")
@@ -58,6 +67,7 @@ def cook(recipe_id):
         max_servings=MAX_SERVINGS,
         ingredients=ingredients,
         format_quantity=format_quantity,
+        format_unit=format_unit,
     ), (400 if servings_error else 200)
 
 
