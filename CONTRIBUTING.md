@@ -11,7 +11,7 @@ pip install -r requirements.txt
 copy .env.example .env       # Windows
 cp .env.example .env         # macOS/Linux
 flask --app run import-recipes   # one-time: load recipes from TheMealDB (~30 seconds)
-flask --app run create-user <name> --admin   # optional: make an account to log in with
+flask --app run create-user <name> --admin   # optional: make an admin account (regular accounts can sign up at /register)
 python run.py
 ```
 Open http://127.0.0.1:5000
