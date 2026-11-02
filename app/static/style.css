@@ -274,3 +274,52 @@ button.button{
     color: #b3261e;
     font-weight: 600;
 }
+/* Home */
+.home-hero{
+    padding: 2rem 0;
+}
+.home-tagline{
+    font-size: 1.15rem;
+    margin: 0 0 1.5rem;
+}
+.home-actions{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+.how-it-works{
+    list-style: none;
+    counter-reset: how;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1rem;
+}
+.how-it-works li{
+    counter-increment: how;
+    box-sizing: border-box;
+    padding: 1.25rem;
+    border: 2px solid #e5e5e5;
+    border-bottom-width: 4px;
+    border-radius: 1rem;
+    background: #fff;
+}
+.how-it-works li::before{
+    content: counter(how);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    background: #e8f3ec;
+    color: #2f7d4f;
+    font-weight: 700;
+}
+.how-it-works h3{
+    margin: 0.75rem 0 0.25rem;
+}
+.how-it-works p{
+    margin: 0;
+}

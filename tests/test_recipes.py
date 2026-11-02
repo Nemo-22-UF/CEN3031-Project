@@ -28,3 +28,9 @@ def test_recipes_page_shows_every_recipe(client):
     assert "Simple Scrambled Eggs" in html
     assert "Garlic Butter Pasta" in html
     assert "Avocado Toast" in html
+    
+def test_home_explains_how_it_works(client):
+    html = client.get("/").get_data(as_text=True)
+    assert "How Skill-It works" in html
+    assert "Start cooking" in html
+    assert "/login" in html

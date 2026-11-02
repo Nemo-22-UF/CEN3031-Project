@@ -4,8 +4,30 @@
 
 {% block content %}
 <section class="home">
-    <h1>Skill-It</h1>
-    <p>Learn to cook one recipe at a time.</p>
-    <a class="button" href="{{ url_for('main.recipes') }}">Browse recipes</a>
+    <div class="home-hero">
+        <h1>Skill-It</h1>
+        <p class="home-tagline">Learn to cook one recipe at a time.</p>
+        <div class="home-actions">
+            <a class="button button-large" href="{{ url_for('main.recipes') }}">Start cooking</a>
+            {% if not current_user.is_authenticated %}
+            <a class="button button-secondary button-large" href="{{ url_for('auth.login') }}">Log in</a>            {% endif %}
+        </div>
+    </div>
+
+    <h2>How Skill-It works</h2>
+    <ol class="how-it-works">
+        <li>
+            <h3>Pick a recipe</h3>
+            <p>Browse recipes and choose one that fits your skill level.</p>
+        </li>
+        <li>
+            <h3>Cook step by step</h3>
+            <p>Follow one step at a time with ingredients scaled to your servings.</p>
+        </li>
+        <li>
+            <h3>Earn stars and level up</h3>
+            <p>Finish recipes to earn stars and unlock harder ones.</p>
+        </li>
+    </ol>
 </section>
 {% endblock %}
