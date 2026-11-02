@@ -14,8 +14,8 @@
             <a class="recipe-card" href="{{ url_for('main.recipe_detail', recipe_id=recipe.id) }}">
                 <h2 class="recipe-card-title">{{ recipe.title }}</h2>
                 <div class="badges">
-                    <span class="badge">{{ recipe.steps | length }} steps</span>
-                    <span class="badge">{{ recipe.ingredients | length }} ingredients</span>
+                    <span class="badge">{{ recipe.steps | length }} step{{ "s" if recipe.steps | length != 1 }}</span>
+                    <span class="badge">{{ recipe.ingredients | length }} ingredient{{ "s" if recipe.ingredients | length != 1 }}</span>
                     <span class="badge">Serves {{ recipe.base_servings }}</span>
                 </div>
                 <span class="recipe-card-cta">View recipe →</span>
