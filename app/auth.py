@@ -98,8 +98,8 @@ def register():
             db.session.add(user)
             db.session.commit()
             login_user(user)
-            flash(f"Welcome to Skill-It, {user.username}!")
-            return redirect(url_for("auth.profile"))
+            flash(f"Welcome, {user.username}! Your account is ready.")
+            return redirect(url_for("main.recipes"))
 
     return render_template(
         "register.html", error=error, username=username, min_password_length=MIN_PASSWORD_LENGTH
