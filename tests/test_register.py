@@ -34,19 +34,25 @@ def test_login_page_links_to_register(client):
     assert 'href="/register"' in html
 
 
+def test_nav_shows_sign_up_only_when_logged_out(app, client):
+    assert 'href="/register">Sign up<' in client.get("/").get_data(as_text=True)
+    register(client)
+    assert "Sign up" not in client.get("/").get_data(as_text=True)
+
+
 def test_register_page_links_back_to_login(client):
     html = client.get("/register").get_data(as_text=True)
     assert 'href="/login"' in html
 
 
-def test_valid_registration_creates_user_and_logs_in(app, client):
+def test_valid_registration_logs_in_and_goes_to_recipes(app, client):
     response = register(client)
     assert response.status_code == 302
-    assert response.headers["Location"].endswith("/profile")
+    assert response.headers["Location"].endswith("/recipes")
 
-    html = client.get("/profile").get_data(as_text=True)
-    assert "Signed in as <strong>maria</strong>" in html
-    assert "Welcome to Skill-It, maria!" in html
+    html = client.get("/recipes").get_data(as_text=True)
+    assert "Welcome, maria! Your account is ready." in html
+    assert "Signed in as <strong>maria</strong>" in client.get("/profile").get_data(as_text=True)
 
     with app.app_context():
         user = User.query.filter_by(username="maria").one()
