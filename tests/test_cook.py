@@ -22,7 +22,8 @@ def test_last_step_links_to_finish(client):
     html = response.get_data(as_text=True)
     assert "Step 6 of 6" in html
     assert "Finish cooking" in html
-    assert "/recipes/1/cook/complete" in html
+    assert "/recipes/1/cook/save" in html
+    assert 'method="POST"' in html
     assert "Next step" not in html
 
 
