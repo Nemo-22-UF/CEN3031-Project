@@ -56,3 +56,24 @@ class CookingStep(db.Model):
         db.CheckConstraint("step_number > 0"),
         db.UniqueConstraint("recipe_id", "step_number")
     )
+
+class Favorite(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey("recipe.id"), nullable=False)
+
+    __table_args__ = (
+        db.UniqueConstraint("user_id", "recipe_id"),
+    )
+
+
+class Completion(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey("recipe.id"), nullable=False)
+
+def get_favorites(user_id):
+    return Favorite.query.filter_by(user_id=user_id).all()
+
+def get_completions(user_id):
+    return Completion.query.filter_by(user_id=user_id).all()
