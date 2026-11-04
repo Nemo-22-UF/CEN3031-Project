@@ -55,3 +55,6 @@ def test_empty_search_shows_every_recipe(client):
     assert "Simple Scrambled Eggs" in html
     assert "Garlic Butter Pasta" in html
     assert "Avocado Toast" in html
+def test_nav_highlights_current_page(client):
+    html = client.get("/recipes").get_data(as_text=True)
+    assert 'nav-link active" href="/recipes"' in html
