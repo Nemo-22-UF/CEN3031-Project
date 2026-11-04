@@ -86,6 +86,22 @@ body{
     font-size: 0.9rem;
     cursor: pointer;
 }
+.search-form{
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+.search-form input{
+    flex: 1;
+    max-width: 20rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+.search-form .button{
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
 .servings-error{
     margin: 0.5rem 0 0;
     color: #b3261e;

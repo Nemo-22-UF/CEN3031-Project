@@ -96,6 +96,12 @@ def get_all_recipes():
     return [recipe_to_dict(recipe) for recipe in Recipe.query.order_by(Recipe.id).all()]
 
 
+def search_recipes(query):
+    """Return recipes whose name contains the query, ignoring case."""
+    matches = Recipe.query.filter(Recipe.name.ilike(f"%{query}%")).order_by(Recipe.id).all()
+    return [recipe_to_dict(recipe) for recipe in matches]
+
+
 def seed_sample_recipes():
     """Save SAMPLE_RECIPES if the database has no recipes yet. Safe to call again."""
     if Recipe.query.first() is not None:

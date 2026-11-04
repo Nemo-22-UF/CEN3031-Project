@@ -1,6 +1,6 @@
 from flask import Blueprint, abort, redirect, render_template, request, url_for
 
-from app.recipes import get_all_recipes, get_recipe
+from app.recipes import get_all_recipes, get_recipe, search_recipes
 from app.servings import (
     MAX_SERVINGS,
     MIN_SERVINGS,
@@ -25,7 +25,12 @@ def health():
 
 @main.route("/recipes")
 def recipes():
-    return render_template("recipes.html", recipes=get_all_recipes())
+    query = request.args.get("q", "").strip()
+    if query:
+        found = search_recipes(query)
+    else:
+        found = get_all_recipes()
+    return render_template("recipes.html", recipes=found, query=query)
 
 
 @main.route("/recipes/<int:recipe_id>")
