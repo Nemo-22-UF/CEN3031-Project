@@ -34,3 +34,23 @@ def test_home_explains_how_it_works(client):
     assert "How Skill-It works" in html
     assert "Start cooking" in html
     assert "/login" in html
+
+def test_search_finds_matching_recipe(client):
+    html = client.get("/recipes?q=pasta").get_data(as_text=True)
+    assert "Garlic Butter Pasta" in html
+    assert "Avocado Toast" not in html
+
+def test_search_ignores_case(client):
+    html = client.get("/recipes?q=EGGS").get_data(as_text=True)
+    assert "Simple Scrambled Eggs" in html
+
+def test_search_with_no_match_links_to_all_recipes(client):
+    html = client.get("/recipes?q=sushi").get_data(as_text=True)
+    assert "Your search has no matches" in html
+    assert "full recipe list" in html
+
+def test_empty_search_shows_every_recipe(client):
+    html = client.get("/recipes?q=").get_data(as_text=True)
+    assert "Simple Scrambled Eggs" in html
+    assert "Garlic Butter Pasta" in html
+    assert "Avocado Toast" in html
