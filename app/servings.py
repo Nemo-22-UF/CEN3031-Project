@@ -57,3 +57,39 @@ def format_quantity(quantity):
         return str(whole)
     fraction = f"{remainder}/{quantity.denominator}"
     return f"{whole} {fraction}" if whole else fraction
+
+
+# Countable units that change with the amount, as singular -> plural.
+# Abbreviations like tbsp, tsp and g read the same either way, so they're left out.
+UNIT_PLURALS = {
+    "slice": "slices",
+    "clove": "cloves",
+    "cup": "cups",
+    "piece": "pieces",
+    "can": "cans",
+    "pinch": "pinches",
+    "handful": "handfuls",
+    "sprig": "sprigs",
+    "stalk": "stalks",
+    "leaf": "leaves",
+    "bunch": "bunches",
+    "fillet": "fillets",
+    "strip": "strips",
+    "sheet": "sheets",
+    "stick": "sticks",
+}
+UNIT_SINGULARS = {plural: singular for singular, plural in UNIT_PLURALS.items()}
+
+
+def format_unit(unit, quantity):
+    """Match a countable unit to its amount: 1 slice, 2 slices, 1/2 cup.
+
+    Units that aren't in UNIT_PLURALS are returned unchanged.
+    """
+    if not unit or quantity is None:
+        return unit or ""
+
+    singular = UNIT_SINGULARS.get(unit.lower(), unit.lower())
+    if singular not in UNIT_PLURALS:
+        return unit
+    return UNIT_PLURALS[singular] if Fraction(quantity) > 1 else singular

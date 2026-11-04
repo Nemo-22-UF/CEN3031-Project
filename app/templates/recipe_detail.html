@@ -20,7 +20,7 @@
             <li>
                 <label>
                     <input type="checkbox">
-                    <span>{% if ingredient.quantity is not none %}{{ format_quantity(ingredient.quantity) }}{% if ingredient.unit %} {{ ingredient.unit }}{% endif %} {% endif %}{{ ingredient.name }}</span>
+                    <span>{% if ingredient.quantity is not none %}{{ format_quantity(ingredient.quantity) }}{% if ingredient.unit %} {{ format_unit(ingredient.unit, ingredient.quantity) }}{% endif %} {% endif %}{{ ingredient.name }}</span>
                 </label>
             </li>
             {% endfor %}

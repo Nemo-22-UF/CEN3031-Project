@@ -49,4 +49,4 @@ def test_pages_show_a_recipe_added_to_the_database(app, client):
 
     cook = client.get(f"/recipes/{recipe_id}/cook?servings=4").get_data(as_text=True)
     assert "Mix the batter." in cook
-    assert "<strong>2 cup</strong>" in cook
+    assert "<strong>2 cups</strong>" in cook

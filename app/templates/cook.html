@@ -29,7 +29,7 @@
             {% for ingredient in ingredients %}
             <li>
                 {%- if ingredient.quantity is not none -%}
-                <strong>{{ format_quantity(ingredient.quantity) }}{% if ingredient.unit %} {{ ingredient.unit }}{% endif %}</strong>
+                <strong>{{ format_quantity(ingredient.quantity) }}{% if ingredient.unit %} {{ format_unit(ingredient.unit, ingredient.quantity) }}{% endif %}</strong>
                 {% endif -%}
                 {{ ingredient.name }}
             </li>
