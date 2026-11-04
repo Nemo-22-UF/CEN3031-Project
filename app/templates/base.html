@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-        <nav class="site-nav">
+    <nav class="site-nav">
         <a class="nav-brand" href="{{ url_for('main.index') }}">Skill-It</a>
         <div class="nav-links">
             <a class="nav-link {{ 'active' if request.endpoint == 'main.recipes' }}" href="{{ url_for('main.recipes') }}">Recipes</a>
