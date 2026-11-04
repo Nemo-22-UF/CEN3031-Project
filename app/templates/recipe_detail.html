@@ -8,8 +8,8 @@
 
     <h1>{{ recipe.title }}</h1>
     <div class="badges">
-        <span class="badge">{{ recipe.steps | length }} steps</span>
-        <span class="badge">{{ recipe.ingredients | length }} ingredients</span>
+        <span class="badge">{{ recipe.steps | length }} step{{ "s" if recipe.steps | length != 1 }}</span>
+        <span class="badge">{{ recipe.ingredients | length }} ingredient{{ "s" if recipe.ingredients | length != 1 }}</span>
         <span class="badge">Serves {{ recipe.base_servings }}</span>
     </div>
 
