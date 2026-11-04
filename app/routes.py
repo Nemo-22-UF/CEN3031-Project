@@ -1,6 +1,6 @@
 from flask import Blueprint, abort, redirect, render_template, request, url_for
 
-from app.recipes import get_all_recipes, get_recipe
+from app.recipes import get_all_recipes, get_recipe, search_recipes
 from app.servings import (
     MAX_SERVINGS,
     MIN_SERVINGS,
@@ -9,6 +9,10 @@ from app.servings import (
     parse_servings,
     scale_ingredients,
 )
+from flask_login import current_user, login_required
+
+from app import db
+from app.models import Favorite, get_favorites
 
 main = Blueprint("main", __name__)
 
@@ -25,7 +29,12 @@ def health():
 
 @main.route("/recipes")
 def recipes():
-    return render_template("recipes.html", recipes=get_all_recipes())
+    query = request.args.get("q", "").strip()
+    if query:
+        found = search_recipes(query)
+    else:
+        found = get_all_recipes()
+    return render_template("recipes.html", recipes=found, query=query)
 
 
 @main.route("/recipes/<int:recipe_id>")
@@ -33,10 +42,17 @@ def recipe_detail(recipe_id):
     recipe = get_recipe(recipe_id)
     if recipe is None:
         abort(404)
-    return render_template(
-        "recipe_detail.html", recipe=recipe, format_quantity=format_quantity, format_unit=format_unit
+    is_favorite = (
+        current_user.is_authenticated
+        and Favorite.query.filter_by(user_id=current_user.id, recipe_id=recipe_id).first() is not None
     )
-
+    return render_template(
+        "recipe_detail.html",
+        recipe=recipe,
+        format_quantity=format_quantity,
+        format_unit=format_unit,
+        is_favorite=is_favorite,
+    )
 
 @main.route("/recipes/<int:recipe_id>/cook")
 def cook(recipe_id):
@@ -79,3 +95,23 @@ def cook_complete(recipe_id):
 
     # Saving the completion to the user's history is handled by PBI-08.
     return render_template("cook_complete.html", recipe=recipe)
+
+@main.route("/recipes/<int:recipe_id>/favorite", methods=["POST"])
+@login_required
+def toggle_favorite(recipe_id):
+    if get_recipe(recipe_id) is None:
+        abort(404)
+    favorite = Favorite.query.filter_by(user_id=current_user.id, recipe_id=recipe_id).first()
+    if favorite:
+        db.session.delete(favorite)
+    else:
+        db.session.add(Favorite(user_id=current_user.id, recipe_id=recipe_id))
+    db.session.commit()
+    return redirect(url_for("main.recipe_detail", recipe_id=recipe_id))
+
+
+@main.route("/favorites")
+@login_required
+def favorites():
+    recipes = [get_recipe(favorite.recipe_id) for favorite in get_favorites(current_user.id)]
+    return render_template("favorites.html", recipes=[recipe for recipe in recipes if recipe])
