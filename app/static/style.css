@@ -347,3 +347,11 @@ button.button{
 .how-it-works p{
     margin: 0;
 }
+.favorite-form{
+    margin: 1rem 0 1.5rem;
+}
+.favorite-form .button{
+    padding: 0.4rem 0.9rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
