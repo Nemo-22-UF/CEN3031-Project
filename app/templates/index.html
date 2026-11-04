@@ -9,8 +9,10 @@
         <p class="home-tagline">Learn to cook one recipe at a time.</p>
         <div class="home-actions">
             <a class="button button-large" href="{{ url_for('main.recipes') }}">Start cooking</a>
-            {% if not current_user.is_authenticated %}
-            <a class="button button-secondary button-large" href="{{ url_for('auth.login') }}">Log in</a>            {% endif %}
+             {% if not current_user.is_authenticated %}
+            <a class="button button-secondary button-large" href="{{ url_for('auth.register') }}">Sign up</a>
+            <a class="button button-secondary button-large" href="{{ url_for('auth.login') }}">Log in</a>
+            {% endif %}
         </div>
     </div>
 

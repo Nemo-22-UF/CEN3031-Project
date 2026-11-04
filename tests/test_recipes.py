@@ -33,7 +33,8 @@ def test_home_explains_how_it_works(client):
     html = client.get("/").get_data(as_text=True)
     assert "How Skill-It works" in html
     assert "Start cooking" in html
-    assert "/login" in html
+    assert 'button-large" href="/register">Sign up</a>' in html
+    assert 'button-large" href="/login">Log in</a>' in html
 
 def test_search_finds_matching_recipe(client):
     html = client.get("/recipes?q=pasta").get_data(as_text=True)
