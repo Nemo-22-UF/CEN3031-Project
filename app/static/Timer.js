@@ -1,26 +1,24 @@
-
-let seconds = 300; // 5 minutes
+let seconds = 300;
 let timer = null;
+const input = document.getElementById("timer-minutes");
 const display = document.getElementById("timer-display");
 
 function updateDisplay() {
     let minutes = Math.floor(seconds / 60);
     let remainingSeconds = seconds % 60;
-    display.textContent =
-        String(minutes).padStart(2, "0") + ":" +
-        String(remainingSeconds).padStart(2, "0");
+    display.textContent= String(minutes).padStart(2, "0") + ":" + String(remainingSeconds).padStart(2, "0");
 }
 
 function startTimer() {
-    if (timer !== null || seconds === 0) return;
-
+    if (timer !== null || seconds=== 0){
+         return;
+    }
     timer = setInterval(function () {
         seconds--;
         updateDisplay();
-
         if (seconds <= 0) {
             pauseTimer();
-            alert("Cooking timer finished!");
+            alert("Timer Complete!");
         }
     }, 1000);
 }
@@ -32,10 +30,10 @@ function pauseTimer() {
 
 function resetTimer() {
     pauseTimer();
-    seconds = 300;
+    seconds = Number(input.value)*60;
     updateDisplay();
 }
-
+input.addEventListener("change",resetTimer);
 document.getElementById("timer-start").addEventListener("click", startTimer);
 document.getElementById("timer-pause").addEventListener("click", pauseTimer);
 document.getElementById("timer-reset").addEventListener("click", resetTimer);

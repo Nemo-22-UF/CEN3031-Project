@@ -9,9 +9,16 @@
          aria-valuemin="1" aria-valuemax="{{ total_steps }}" aria-valuenow="{{ step }}">
         <div class="cook-progress-fill" style="width: {{ (step / total_steps * 100) | round | int }}%"></div>
     </div>
-
     <p class="cook-step">{{ instruction }}</p>
-
+    <section id="cooking-timer" class="cooking-timer">
+        <h2>Cooking Timer</h2>
+        <label for="timer-minutes">Minutes:</label>
+        <input id="timer-minutes" type="number" min="1" value="5">
+        <div id="timer-display">05:00</div>
+        <button class= "button timer-buttons" id="timer-start" type="button">Start</button>
+        <button class= "button button-secondary timer-buttons" id="timer-pause" type="button">Pause</button>
+        <button class= "button button-secondary timer-buttons" id="timer-reset" type="button">Reset</button>
+    </section>
     <div class="cook-ingredients">
         <form class="servings-form" method="get" action="{{ url_for('main.cook', recipe_id=recipe.id) }}">
             <input type="hidden" name="step" value="{{ step }}">
@@ -51,4 +58,5 @@
         {% endif %}
     </div>
 </section>
+<script src="{{ url_for('static', filename='Timer.js') }}" defer></script>
 {% endblock %}
