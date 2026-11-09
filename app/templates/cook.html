@@ -44,14 +44,20 @@
         <span class="button button-secondary is-disabled" aria-disabled="true">Back</span>
         {% endif %}
 
+
         {% if step < total_steps %}
         <a class="button" href="{{ url_for('main.cook', recipe_id=recipe.id, step=step + 1, servings=servings) }}">Next step</a>
         {% else %}
+        {% if current_user.is_authenticated %}
         <form method="POST" action="{{ url_for('main.save_completion', recipe_id=recipe.id) }}">
             <input type="hidden" name="token" value="{{ token }}">
             <button class="button" type="submit">Finish cooking</button>
         </form>
+        {% else %}
+        <a class="button" href="{{ url_for('main.cook_complete', recipe_id=recipe.id) }}">Finish cooking</a>
         {% endif %}
+        {% endif %}
+
     </div>
 </section>
 {% endblock %}
