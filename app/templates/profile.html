@@ -1,14 +1,50 @@
 {% extends "base.html" %}
 
-{% block title %}Profile{% endblock %}
+{% block title %}{{ user.username }}{% endblock %}
 
 {% block content %}
-<section class="auth">
-    <h1>Your profile</h1>
-    <p>Signed in as <strong>{{ current_user.username }}</strong>{% if current_user.is_admin %} (admin){% endif %}.</p>
+<section class="profile">
+    <div class="profile-header">
+        <span class="profile-avatar" aria-hidden="true">{{ avatar_emoji(user) }}</span>
+        <div class="profile-heading">
+            <h1>{{ user.username }}{% if user.is_admin %} <span class="badge">admin</span>{% endif %}</h1>
+            <p class="profile-joined">Cooking since {{ user.joined_at.strftime("%B %Y") }}</p>
+        </div>
+        {% if is_me %}
+        <a class="button button-secondary profile-edit" href="{{ url_for('auth.edit_profile') }}">Edit profile</a>
+        {% endif %}
+    </div>
 
-    <form method="post" action="{{ url_for('auth.logout') }}">
+    {% if user.bio %}
+    <p class="profile-bio">{{ user.bio }}</p>
+    {% elif is_me %}
+    <p class="profile-bio profile-empty">No bio yet. <a href="{{ url_for('auth.edit_profile') }}">Add one</a>.</p>
+    {% endif %}
+
+    <ul class="profile-stats">
+        <li><strong>{{ stats.cooked }}</strong> time{{ "s" if stats.cooked != 1 }} cooked</li>
+        <li><strong>{{ stats.unique_recipes }}</strong> different recipe{{ "s" if stats.unique_recipes != 1 }}</li>
+        <li><strong>{{ stats.favorites }}</strong> favorite{{ "s" if stats.favorites != 1 }}</li>
+    </ul>
+
+    <h2>Top recipes</h2>
+    {% if top_recipes %}
+    <ol class="profile-top">
+        {% for recipe in top_recipes %}
+        <li><a href="{{ url_for('main.recipe_detail', recipe_id=recipe.id) }}">{{ recipe.title }}</a></li>
+        {% endfor %}
+    </ol>
+    {% elif is_me %}
+    <p class="profile-empty">Pick your top 3 from your favorites in <a href="{{ url_for('auth.edit_profile') }}">Edit profile</a>.</p>
+    {% else %}
+    <p class="profile-empty">No top recipes picked yet.</p>
+    {% endif %}
+
+    {% if is_me %}
+    <form class="profile-logout" method="post" action="{{ url_for('auth.logout') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <button class="button button-secondary" type="submit">Log out</button>
     </form>
+    {% endif %}
 </section>
 {% endblock %}

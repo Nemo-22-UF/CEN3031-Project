@@ -17,7 +17,7 @@
             <a class="nav-link {{ 'active' if request.endpoint == 'auth.admin' }}" href="{{ url_for('auth.admin') }}">Admin</a>
             {% endif %}
             <a class="nav-user {{ 'active' if request.endpoint == 'auth.profile' }}" href="{{ url_for('auth.profile') }}">
-                <span class="nav-avatar">{{ current_user.username[0] | upper }}</span>
+                <span class="nav-avatar">{{ avatar_emoji(current_user) }}</span>
                 {{ current_user.username }}
             </a>
             {% else %}

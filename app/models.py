@@ -15,6 +15,13 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
+    bio = db.Column(db.String(160), nullable=False, default="")
+    avatar = db.Column(db.String(20), nullable=False, default="egg")
+    joined_at = db.Column(
+        db.DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False
+    )
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -61,9 +68,11 @@ class Favorite(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey("recipe.id"), nullable=False)
+    rank = db.Column(db.Integer, nullable=True)
 
     __table_args__ = (
         db.UniqueConstraint("user_id", "recipe_id"),
+        db.CheckConstraint("rank BETWEEN 1 AND 3"),
     )
 
 
