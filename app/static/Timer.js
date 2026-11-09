@@ -30,7 +30,9 @@ function pauseTimer() {
 
 function resetTimer() {
     pauseTimer();
-    seconds = Number(input.value)*60;
+    let minutes = Math.max(1, Math.floor(Number(input.value)) || 5);
+    input.value = minutes;
+    seconds = minutes * 60;
     updateDisplay();
 }
 input.addEventListener("change",resetTimer);
