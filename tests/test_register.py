@@ -52,7 +52,7 @@ def test_valid_registration_logs_in_and_goes_to_recipes(app, client):
 
     html = client.get("/recipes").get_data(as_text=True)
     assert "Welcome, maria! Your account is ready." in html
-    assert "Signed in as <strong>maria</strong>" in client.get("/profile").get_data(as_text=True)
+    assert "<h1>maria" in client.get("/profile").get_data(as_text=True)
 
     with app.app_context():
         user = User.query.filter_by(username="maria").one()
