@@ -420,3 +420,47 @@ button.button{
     font-size: 0.9rem;
     cursor: pointer;
 }
+#timer-display{
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 12px 0;
+}
+.cooking-timer{
+    padding: 1rem;
+    border: 2px solid #e5e5e5;
+    border-bottom-width: 4px;
+    border-radius: 1rem;
+    background: #fff;
+    text-align: center;
+}
+.cooking-timer h2{
+    margin: 0 0 1rem;
+    font-size: 1.15rem;
+}
+#timer-minutes{
+    width: 3rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+#timer-display{
+    font-size: 3rem;
+    font-weight: 700;
+    margin: 1rem 0;
+}
+.timer-buttons{
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+}
+@media (min-width: 1200px){
+    .cooking-timer{
+        position: fixed;
+        top: 5rem;
+        left: 1rem;
+        width: 14rem;
+    }
+}
+@media (max-width: 1199px){
+    .cooking-timer{
+        margin: 1rem 0;
+    }
+}
