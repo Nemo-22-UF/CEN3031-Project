@@ -1,4 +1,4 @@
-from flask import Blueprint, abort, redirect, render_template, request, url_for
+from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
 from app.recipes import get_all_recipes, get_recipe, search_recipes
 from app.servings import (
     MAX_SERVINGS,
@@ -14,6 +14,7 @@ import secrets
 from flask_login import current_user, login_required
 from sqlalchemy.exc import IntegrityError
 from app import db
+from app.levels import level_info
 from app.models import Completion, Favorite, Recipe, get_favorites
 
 main = Blueprint("main", __name__)
@@ -113,6 +114,7 @@ def save_completion(recipe_id):
         if existing.user_id != current_user.id or existing.recipe_id != recipe_id:
             abort(403)
     else:
+        before = level_info(current_user.id)
         db.session.add(Completion(
             user_id=current_user.id,
             recipe_id=recipe_id,
@@ -120,6 +122,10 @@ def save_completion(recipe_id):
         ))
         try:
             db.session.commit()
+            after = level_info(current_user.id)
+            flash(f"+{after['xp'] - before['xp']} XP")
+            if after["level"] > before["level"]:
+                flash(f"Level up! You're now level {after['level']}: {after['title']}.")
         except IntegrityError:
             db.session.rollback()
             existing = Completion.query.filter_by(submission_token=token).first()

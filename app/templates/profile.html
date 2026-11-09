@@ -15,6 +15,21 @@
         {% endif %}
     </div>
 
+    <div class="level-card">
+        <div class="level-badge" aria-hidden="true">{{ level.level }}</div>
+        <div class="level-body">
+            <p class="level-title"><strong>Level {{ level.level }}</strong> · {{ level.title }}</p>
+            <div class="level-bar" role="progressbar" aria-label="Progress to level {{ level.level + 1 }}"
+                 aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ level.progress }}">
+                <div class="level-bar-fill" style="width: {{ level.progress }}%"></div>
+            </div>
+            <p class="level-next">{{ level.xp }} XP · {{ level.xp_to_next }} XP to level {{ level.level + 1 }}</p>
+        </div>
+        {% if level.streak %}
+        <div class="level-streak" title="Days in a row with a recipe cooked">🔥 {{ level.streak }} day{{ "s" if level.streak != 1 }}</div>
+        {% endif %}
+    </div>
+
     {% if user.bio %}
     <p class="profile-bio">{{ user.bio }}</p>
     {% elif is_me %}
