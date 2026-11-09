@@ -9,14 +9,12 @@ from app.servings import (
     scale_ingredients,
 )
 from flask_login import current_user, login_required
-
 from app import db
-from app.models import Favorite, get_favorites
 import secrets
 from flask_login import current_user, login_required
 from sqlalchemy.exc import IntegrityError
 from app import db
-from app.models import Completion
+from app.models import Completion, Favorite, get_favorites
 
 main = Blueprint("main", __name__)
 
