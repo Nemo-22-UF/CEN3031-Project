@@ -86,6 +86,22 @@ body{
     font-size: 0.9rem;
     cursor: pointer;
 }
+.search-form{
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+.search-form input{
+    flex: 1;
+    max-width: 20rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+.search-form .button{
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
 .servings-error{
     margin: 0.5rem 0 0;
     color: #b3261e;
@@ -231,9 +247,74 @@ body{
     font-size: 1.1rem;
 }
 /* Login and profile */
-nav{
+.site-nav{
     display: flex;
-    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    margin: -1rem -1rem 0;
+    background: #fff;
+    border-bottom: 2px solid #e5e5e5;
+}
+.nav-brand{
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #2f7d4f;
+    text-decoration: none;
+}
+.nav-links{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+.nav-link{
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    color: #333;
+    font-weight: 600;
+    text-decoration: none;
+}
+.nav-link:hover{
+    background: #f0f5f2;
+}
+.nav-link.active{
+    background: #e8f3ec;
+    color: #2f7d4f;
+}
+.nav-user{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 0.5rem;
+    padding: 0.25rem 0.75rem 0.25rem 0.25rem;
+    border: 2px solid #e5e5e5;
+    border-radius: 999px;
+    color: #333;
+    font-weight: 600;
+    text-decoration: none;
+}
+.nav-user:hover,
+.nav-user.active{
+    border-color: #2f7d4f;
+}
+.nav-avatar{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 999px;
+    background: #2f7d4f;
+    color: #fff;
+    font-size: 0.9rem;
+}
+.nav-signup{
+    margin-left: 0.25rem;
+    padding: 0.45rem 1rem;
+    font-size: 0.95rem;
 }
 .flash{
     max-width: 24rem;
@@ -270,7 +351,72 @@ button.button{
     font-weight: 600;
     cursor: pointer;
 }
+.auth-hint{
+    margin: -0.25rem 0 0.25rem;
+    font-size: 0.85rem;
+    color: #555;
+}
+.auth-switch{
+    margin-top: 1.5rem;
+}
 .form-error{
     color: #b3261e;
     font-weight: 600;
+}
+/* Home */
+.home-hero{
+    padding: 2rem 0;
+}
+.home-tagline{
+    font-size: 1.15rem;
+    margin: 0 0 1.5rem;
+}
+.home-actions{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+.how-it-works{
+    list-style: none;
+    counter-reset: how;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1rem;
+}
+.how-it-works li{
+    counter-increment: how;
+    box-sizing: border-box;
+    padding: 1.25rem;
+    border: 2px solid #e5e5e5;
+    border-bottom-width: 4px;
+    border-radius: 1rem;
+    background: #fff;
+}
+.how-it-works li::before{
+    content: counter(how);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    background: #e8f3ec;
+    color: #2f7d4f;
+    font-weight: 700;
+}
+.how-it-works h3{
+    margin: 0.75rem 0 0.25rem;
+}
+.how-it-works p{
+    margin: 0;
+}
+.favorite-form{
+    margin: 1rem 0 1.5rem;
+}
+.favorite-form .button{
+    padding: 0.4rem 0.9rem;
+    font-size: 0.9rem;
+    cursor: pointer;
 }

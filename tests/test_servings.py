@@ -2,7 +2,7 @@ from fractions import Fraction
 
 import pytest
 
-from app.servings import format_quantity, parse_servings, scale_ingredients
+from app.servings import format_quantity, format_unit, parse_servings, scale_ingredients
 
 
 INGREDIENTS = [
@@ -81,3 +81,33 @@ def test_step_links_keep_the_chosen_servings(client):
     html = client.get("/recipes/1/cook?step=2&servings=4").get_data(as_text=True)
     assert "/recipes/1/cook?step=1&amp;servings=4" in html
     assert "/recipes/1/cook?step=3&amp;servings=4" in html
+
+
+@pytest.mark.parametrize(
+    "unit, quantity, expected",
+    [
+        ("slice", 2, "slices"),
+        ("slice", 1, "slice"),
+        ("cloves", 1, "clove"),
+        ("cloves", Fraction(3, 2), "cloves"),
+        ("cup", Fraction(1, 2), "cup"),
+        ("leaf", 4, "leaves"),
+        ("tbsp", 3, "tbsp"),
+        ("g", 200, "g"),
+        ("", 2, ""),
+    ],
+)
+def test_format_unit_matches_the_amount(unit, quantity, expected):
+    assert format_unit(unit, quantity) == expected
+
+
+def test_cook_page_pluralizes_scaled_units(client):
+    # Avocado toast is recipe 3 and uses 1 slice of bread for 1 serving.
+    html = client.get("/recipes/3/cook?servings=2").get_data(as_text=True)
+    assert "<strong>2 slices</strong>" in html
+    assert "2 slice<" not in html
+
+
+def test_cook_page_keeps_singular_for_one(client):
+    html = client.get("/recipes/3/cook?servings=1").get_data(as_text=True)
+    assert "<strong>1 slice</strong>" in html

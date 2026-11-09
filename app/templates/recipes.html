@@ -7,6 +7,11 @@
     <h1>Recipes</h1>
     <p class="recipes-intro">Pick a recipe and we'll walk you through it step by step.</p>
 
+    <form class="search-form" action="{{ url_for('main.recipes') }}" method="get">
+        <input type="search" name="q" value="{{ query }}" placeholder="Search recipes by name" aria-label="Search recipes by name">
+        <button class="button" type="submit">Search</button>
+    </form>
+
     {% if recipes %}
     <ul class="recipe-grid">
         {% for recipe in recipes %}
@@ -14,8 +19,8 @@
             <a class="recipe-card" href="{{ url_for('main.recipe_detail', recipe_id=recipe.id) }}">
                 <h2 class="recipe-card-title">{{ recipe.title }}</h2>
                 <div class="badges">
-                    <span class="badge">{{ recipe.steps | length }} steps</span>
-                    <span class="badge">{{ recipe.ingredients | length }} ingredients</span>
+                    <span class="badge">{{ recipe.steps | length }} step{{ "s" if recipe.steps | length != 1 }}</span>
+                    <span class="badge">{{ recipe.ingredients | length }} ingredient{{ "s" if recipe.ingredients | length != 1 }}</span>
                     <span class="badge">Serves {{ recipe.base_servings }}</span>
                 </div>
                 <span class="recipe-card-cta">View recipe →</span>
@@ -23,6 +28,8 @@
         </li>
         {% endfor %}
     </ul>
+    {% elif query %}
+    <p class="no-results">Your search has no matches in our recipe database. Here is our <a href="{{ url_for('main.recipes') }}">full recipe list</a>. If you still cannot find your recipe, contact us at <a href="mailto:thomasheeps10@gmail.com">thomasheeps10@gmail.com</a> with your recipe and we will add it!</p>
     {% else %}
     <p>No recipes yet.</p>
     {% endif %}
