@@ -13,9 +13,11 @@
         <span class="badge">Serves {{ recipe.base_servings }}</span>
     </div>
     {% if current_user.is_authenticated %}
-    <form class="favorite-form" method="POST" action="{{ url_for('main.toggle_favorite', recipe_id=recipe.id) }}">
+    <form class="favorite-form js-favorite" method="POST" action="{{ url_for('main.toggle_favorite', recipe_id=recipe.id) }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <button class="button button-secondary" type="submit">{{ "★ Favorited" if is_favorite else "☆ Add to favorites" }}</button>
+        <button class="button button-secondary{{ ' is-favorite' if is_favorite }}" type="submit"
+                aria-pressed="{{ 'true' if is_favorite else 'false' }}"
+                data-on-text="★ Favorited" data-off-text="☆ Add to favorites">{{ "★ Favorited" if is_favorite else "☆ Add to favorites" }}</button>
     </form>
     {% endif %}
 

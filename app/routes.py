@@ -14,7 +14,7 @@ import secrets
 from flask_login import current_user, login_required
 from sqlalchemy.exc import IntegrityError
 from app import db
-from app.models import Completion, Favorite, get_favorites
+from app.models import Completion, Favorite, Recipe, get_favorites
 
 main = Blueprint("main", __name__)
 
@@ -134,7 +134,7 @@ def save_completion(recipe_id):
 @main.route("/recipes/<int:recipe_id>/favorite", methods=["POST"])
 @login_required
 def toggle_favorite(recipe_id):
-    if get_recipe(recipe_id) is None:
+    if db.session.get(Recipe, recipe_id) is None:
         abort(404)
     favorite = Favorite.query.filter_by(user_id=current_user.id, recipe_id=recipe_id).first()
     if favorite:
@@ -142,6 +142,8 @@ def toggle_favorite(recipe_id):
     else:
         db.session.add(Favorite(user_id=current_user.id, recipe_id=recipe_id))
     db.session.commit()
+    if request.headers.get("Accept") == "application/json":
+        return {"favorite": favorite is None}
     next_page = request.form.get("next", "")
     if next_page.startswith("/") and not next_page.startswith("//"):
         return redirect(next_page)

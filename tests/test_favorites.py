@@ -69,3 +69,15 @@ def test_favorite_ignores_outside_redirect(app, client):
     login(app, client)
     response = client.post("/recipes/1/favorite", data={"next": "//evil.example.com"})
     assert response.headers["Location"].endswith("/recipes/1")
+
+
+def test_favorite_toggle_returns_json(app, client):
+    login(app, client)
+    headers = {"Accept": "application/json"}
+    assert client.post("/recipes/1/favorite", headers=headers).get_json() == {"favorite": True}
+    assert client.post("/recipes/1/favorite", headers=headers).get_json() == {"favorite": False}
+
+
+def test_favorite_missing_recipe(app, client):
+    login(app, client)
+    assert client.post("/recipes/999/favorite").status_code == 404

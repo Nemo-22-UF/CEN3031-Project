@@ -8,6 +8,7 @@ something to show before anyone runs the TheMealDB importer.
 """
 
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import joinedload, selectinload
 
 from app import db
 from app.models import CookingStep, Ingredient, Recipe, RecipeIngredient
@@ -91,14 +92,21 @@ def get_recipe(recipe_id):
     return recipe_to_dict(recipe) if recipe else None
 
 
+def with_details(query):
+    return query.options(
+        selectinload(Recipe.ingredients).joinedload(RecipeIngredient.ingredient),
+        selectinload(Recipe.steps),
+    )
+
+
 def get_all_recipes():
     """Return every recipe, oldest first."""
-    return [recipe_to_dict(recipe) for recipe in Recipe.query.order_by(Recipe.id).all()]
+    return [recipe_to_dict(recipe) for recipe in with_details(Recipe.query).order_by(Recipe.id).all()]
 
 
 def search_recipes(query):
     """Return recipes whose name contains the query, ignoring case."""
-    matches = Recipe.query.filter(Recipe.name.ilike(f"%{query}%")).order_by(Recipe.id).all()
+    matches = with_details(Recipe.query).filter(Recipe.name.ilike(f"%{query}%")).order_by(Recipe.id).all()
     return [recipe_to_dict(recipe) for recipe in matches]
 
 
