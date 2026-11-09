@@ -83,6 +83,7 @@ def recipe_to_dict(recipe):
             for item in recipe.ingredients
         ],
         "steps": [step.instruction for step in recipe.steps],
+        "author": recipe.author.username if recipe.author else None,
     }
 
 
@@ -96,6 +97,7 @@ def with_details(query):
     return query.options(
         selectinload(Recipe.ingredients).joinedload(RecipeIngredient.ingredient),
         selectinload(Recipe.steps),
+        joinedload(Recipe.author),
     )
 
 

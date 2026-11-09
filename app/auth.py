@@ -10,6 +10,7 @@ from sqlalchemy import func
 
 from app import db, limiter, login_manager
 from app.levels import level_info
+from app.user_recipes import recipes_by
 from app.models import User
 from app.profiles import (
     AVATARS,
@@ -153,6 +154,7 @@ def render_profile(user):
         stats=profile_stats(user.id),
         top_recipes=top_favorites(user.id),
         level=level_info(user.id),
+        shared_recipes=recipes_by(user.id),
     )
 
 

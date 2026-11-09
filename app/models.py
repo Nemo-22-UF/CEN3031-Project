@@ -33,6 +33,8 @@ class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     base_servings = db.Column(db.Integer, nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
+    author = db.relationship("User", backref="recipes")
     __table_args__ = (db.CheckConstraint("base_servings > 0"),)
     ingredients = db.relationship("RecipeIngredient", backref="recipe", cascade="all, delete-orphan")
     steps = db.relationship("CookingStep", backref="recipe", order_by="CookingStep.step_number", cascade="all, delete-orphan")

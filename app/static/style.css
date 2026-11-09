@@ -690,3 +690,17 @@ button.button{
 .password-toggle:hover{
     background: #e8f5ec;
 }
+.profile-form input[type="text"],
+.profile-form input[type="number"]{
+    padding: 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    font: inherit;
+}
+.recipes-add{
+    margin-bottom: 1rem;
+}
+.recipe-author{
+    margin: -0.5rem 0 0.75rem;
+    color: #555;
+}

@@ -14,7 +14,17 @@ import secrets
 from flask_login import current_user, login_required
 from sqlalchemy.exc import IntegrityError
 from app import db
+from app import limiter
 from app.levels import level_info
+from app.user_recipes import (
+    MAX_INGREDIENTS,
+    MAX_STEP_LENGTH,
+    MAX_STEPS,
+    MAX_TITLE_LENGTH,
+    RecipeFormError,
+    create_recipe,
+    parse_recipe_form,
+)
 from app.models import Completion, Favorite, Recipe, get_favorites
 
 main = Blueprint("main", __name__)
@@ -161,3 +171,31 @@ def toggle_favorite(recipe_id):
 def favorites():
     recipes = [get_recipe(favorite.recipe_id) for favorite in get_favorites(current_user.id)]
     return render_template("favorites.html", recipes=[recipe for recipe in recipes if recipe])
+
+
+@main.route("/recipes/new", methods=["GET", "POST"])
+@login_required
+@limiter.limit("10 per hour", methods=["POST"], deduct_when=lambda response: response.status_code == 302)
+def new_recipe():
+    form = {"title": "", "servings": "2", "ingredients": "", "steps": ""}
+    error = None
+    if request.method == "POST":
+        form = {key: request.form.get(key, "") for key in form}
+        try:
+            recipe = create_recipe(current_user, *parse_recipe_form(request.form))
+        except RecipeFormError as problem:
+            error = str(problem)
+        else:
+            flash("Your recipe is live. Thanks for sharing!")
+            return redirect(url_for("main.recipe_detail", recipe_id=recipe.id))
+    return render_template(
+        "recipe_new.html",
+        form=form,
+        error=error,
+        max_title_length=MAX_TITLE_LENGTH,
+        max_ingredients=MAX_INGREDIENTS,
+        max_steps=MAX_STEPS,
+        max_step_length=MAX_STEP_LENGTH,
+        min_servings=MIN_SERVINGS,
+        max_servings=MAX_SERVINGS,
+    ), (400 if error else 200)

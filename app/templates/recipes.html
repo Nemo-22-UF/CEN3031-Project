@@ -6,6 +6,9 @@
 <section class="recipes">
     <h1>Recipes</h1>
     <p class="recipes-intro">Pick a recipe and we'll walk you through it step by step.</p>
+    {% if current_user.is_authenticated %}
+    <a class="button button-secondary recipes-add" href="{{ url_for('main.new_recipe') }}">+ Share a recipe</a>
+    {% endif %}
 
     <form class="search-form" action="{{ url_for('main.recipes') }}" method="get">
         <input type="search" name="q" value="{{ query }}" placeholder="Search recipes by name" aria-label="Search recipes by name">

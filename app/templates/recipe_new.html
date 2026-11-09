@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Share a recipe{% endblock %}
+
+{% block content %}
+<section class="profile">
+    <a class="back-link" href="{{ url_for('main.recipes') }}">← All recipes</a>
+    <h1>Share a recipe</h1>
+
+    {% if error %}
+    <p class="form-error" role="alert">{{ error }}</p>
+    {% endif %}
+
+    <form method="post" class="profile-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <label for="title">Title</label>
+        <input id="title" name="title" type="text" value="{{ form.title }}" minlength="3" maxlength="{{ max_title_length }}" required>
+
+        <label for="servings">Serves</label>
+        <input id="servings" name="servings" type="number" value="{{ form.servings }}" min="{{ min_servings }}" max="{{ max_servings }}" required>
+
+        <label for="ingredients">Ingredients</label>
+        <textarea id="ingredients" name="ingredients" rows="6" required
+                  placeholder="2 cups flour&#10;3 eggs&#10;1/2 tsp salt&#10;Pepper, to taste">{{ form.ingredients }}</textarea>
+        <p class="auth-hint">One per line, up to {{ max_ingredients }}. Start with the amount, like "2 cups flour".</p>
+
+        <label for="steps">Steps</label>
+        <textarea id="steps" name="steps" rows="8" required
+                  placeholder="Whisk the eggs.&#10;Heat the pan.&#10;Cook for 2 minutes.">{{ form.steps }}</textarea>
+        <p class="auth-hint">One step per line, up to {{ max_steps }} steps of {{ max_step_length }} characters each.</p>
+
+        <div class="profile-actions">
+            <a class="button button-secondary" href="{{ url_for('main.recipes') }}">Cancel</a>
+            <button class="button" type="submit">Share recipe</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

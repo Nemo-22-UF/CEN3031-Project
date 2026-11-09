@@ -7,6 +7,9 @@
     <a class="back-link" href="{{ url_for('main.recipes') }}">← All recipes</a>
 
     <h1>{{ recipe.title }}</h1>
+    {% if recipe.author %}
+    <p class="recipe-author">Shared by <a href="{{ url_for('auth.public_profile', username=recipe.author) }}">{{ recipe.author }}</a></p>
+    {% endif %}
     <div class="badges">
         <span class="badge">{{ recipe.steps | length }} step{{ "s" if recipe.steps | length != 1 }}</span>
         <span class="badge">{{ recipe.ingredients | length }} ingredient{{ "s" if recipe.ingredients | length != 1 }}</span>
