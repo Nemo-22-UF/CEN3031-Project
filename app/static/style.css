@@ -664,3 +664,29 @@ button.button{
     font-weight: 600;
     white-space: nowrap;
 }
+.password-field{
+    position: relative;
+    display: flex;
+}
+.password-field input{
+    flex: 1;
+    padding-right: 4.5rem !important;
+}
+.password-toggle{
+    position: absolute;
+    top: 50%;
+    right: 0.4rem;
+    transform: translateY(-50%);
+    padding: 0.3rem 0.6rem;
+    border: none;
+    border-radius: 0.4rem;
+    background: transparent;
+    color: #2f7d4f;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.password-toggle:hover{
+    background: #e8f5ec;
+}

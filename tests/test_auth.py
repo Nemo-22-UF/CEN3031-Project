@@ -145,3 +145,10 @@ def test_create_user_command(app):
     again = runner.invoke(args=["create-user", "chef", "--password", "pass1234"])
     assert again.exit_code != 0
     assert "already exists" in again.output
+
+
+def test_password_fields_have_show_buttons(client):
+    assert 'aria-controls="password"' in client.get("/login").get_data(as_text=True)
+    html = client.get("/register").get_data(as_text=True)
+    assert 'aria-controls="password"' in html
+    assert 'aria-controls="confirm"' in html

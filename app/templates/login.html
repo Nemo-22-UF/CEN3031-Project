@@ -16,7 +16,10 @@
         <input id="username" name="username" type="text" value="{{ username }}" autocomplete="username" required>
 
         <label for="password">Password</label>
-        <input id="password" name="password" type="password" autocomplete="current-password" required>
+        <div class="password-field">
+            <input id="password" name="password" type="password" autocomplete="current-password" required>
+            <button class="password-toggle" type="button" aria-controls="password" aria-pressed="false" hidden>Show</button>
+        </div>
 
         <label class="auth-remember">
             <input type="checkbox" name="remember"> Keep me logged in

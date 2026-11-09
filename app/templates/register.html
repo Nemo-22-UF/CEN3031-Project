@@ -18,12 +18,18 @@
         <p class="auth-hint">3 to 30 characters: letters, numbers and underscores.</p>
 
         <label for="password">Password</label>
-        <input id="password" name="password" type="password" autocomplete="new-password"
-               minlength="{{ min_password_length }}" required>
+        <div class="password-field">
+            <input id="password" name="password" type="password" autocomplete="new-password"
+                   minlength="{{ min_password_length }}" required>
+            <button class="password-toggle" type="button" aria-controls="password" aria-pressed="false" hidden>Show</button>
+        </div>
         <p class="auth-hint">At least {{ min_password_length }} characters.</p>
 
         <label for="confirm">Confirm password</label>
-        <input id="confirm" name="confirm" type="password" autocomplete="new-password" required>
+        <div class="password-field">
+            <input id="confirm" name="confirm" type="password" autocomplete="new-password" required>
+            <button class="password-toggle" type="button" aria-controls="confirm" aria-pressed="false" hidden>Show</button>
+        </div>
 
         <button class="button" type="submit">Create account</button>
     </form>

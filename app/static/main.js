@@ -33,3 +33,16 @@ document.querySelectorAll("form.js-favorite").forEach(function (form) {
         }
     });
 });
+
+document.querySelectorAll(".password-toggle").forEach(function (button) {
+    const input = document.getElementById(button.getAttribute("aria-controls"));
+    button.hidden = false;
+    button.addEventListener("click", function () {
+        const showing = input.type === "text";
+        input.type = showing ? "password" : "text";
+        button.textContent = showing ? "Show" : "Hide";
+        button.setAttribute("aria-pressed", showing ? "false" : "true");
+        button.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+        input.focus();
+    });
+});
