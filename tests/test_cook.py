@@ -16,15 +16,13 @@ def test_cook_page_shows_requested_step(client):
     assert "/recipes/1/cook?step=2&amp;servings=1" in html
     assert "/recipes/1/cook?step=4&amp;servings=1" in html
 
-
 def test_last_step_links_to_finish(client):
     response = client.get("/recipes/1/cook?step=6")
     html = response.get_data(as_text=True)
     assert "Step 6 of 6" in html
     assert "Finish cooking" in html
     assert "/recipes/1/cook/complete" in html
-    assert "Next step" not in html
-
+    assert "/recipes/1/cook/save" not in html
 
 def test_out_of_range_step_redirects_to_valid_step(client):
     too_high = client.get("/recipes/1/cook?step=99")

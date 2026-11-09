@@ -1,7 +1,7 @@
 
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
-
+from datetime import datetime, timezone
 from app import db
 
 recipe_tags = db.Table(
@@ -71,6 +71,13 @@ class Completion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey("recipe.id"), nullable=False)
+    completed_at = db.Column(
+        db.DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False
+    )
+    submission_token = db.Column(db.String(64), unique=True, nullable=False)
+
 
 def get_favorites(user_id):
     return Favorite.query.filter_by(user_id=user_id).all()
