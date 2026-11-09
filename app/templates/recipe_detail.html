@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}{{ recipe.title }}{% endblock %}
+
+{% block content %}
+<section class="recipe-detail">
+    <a class="back-link" href="{{ url_for('main.recipes') }}">← All recipes</a>
+
+    <h1>{{ recipe.title }}</h1>
+    <div class="badges">
+        <span class="badge">{{ recipe.steps | length }} step{{ "s" if recipe.steps | length != 1 }}</span>
+        <span class="badge">{{ recipe.ingredients | length }} ingredient{{ "s" if recipe.ingredients | length != 1 }}</span>
+        <span class="badge">Serves {{ recipe.base_servings }}</span>
+    </div>
+    {% if current_user.is_authenticated %}
+    <form class="favorite-form" method="POST" action="{{ url_for('main.toggle_favorite', recipe_id=recipe.id) }}">
+        <button class="button button-secondary" type="submit">{{ "★ Favorited" if is_favorite else "☆ Add to favorites" }}</button>
+    </form>
+    {% endif %}
+
+    <div class="detail-box">
+        <h2>Ingredients</h2>
+        <ul class="ingredient-list">
+            {% for ingredient in recipe.ingredients %}
+            <li>
+                <label>
+                    <input type="checkbox">
+                    <span>{% if ingredient.quantity is not none %}{{ format_quantity(ingredient.quantity) }}{% if ingredient.unit %} {{ format_unit(ingredient.unit, ingredient.quantity) }}{% endif %} {% endif %}{{ ingredient.name }}</span>
+                </label>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="detail-box">
+        <h2>Steps</h2>
+        <ol class="step-list">
+            {% for step in recipe.steps %}
+            <li>{{ step }}</li>
+            {% endfor %}
+        </ol>
+    </div>
+
+    <a class="button button-large" href="{{ url_for('main.cook', recipe_id=recipe.id, step=1) }}">Start cooking</a>
+</section>
+{% endblock %}
