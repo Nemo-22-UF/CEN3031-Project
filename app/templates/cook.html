@@ -57,6 +57,7 @@
         {% else %}
         {% if current_user.is_authenticated %}
         <form method="POST" action="{{ url_for('main.save_completion', recipe_id=recipe.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <input type="hidden" name="token" value="{{ token }}">
             <button class="button" type="submit">Finish cooking</button>
         </form>
