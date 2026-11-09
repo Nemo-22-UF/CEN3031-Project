@@ -8,6 +8,7 @@
     <p>Signed in as <strong>{{ current_user.username }}</strong>{% if current_user.is_admin %} (admin){% endif %}.</p>
 
     <form method="post" action="{{ url_for('auth.logout') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <button class="button button-secondary" type="submit">Log out</button>
     </form>
 </section>

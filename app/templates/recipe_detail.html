@@ -14,6 +14,7 @@
     </div>
     {% if current_user.is_authenticated %}
     <form class="favorite-form" method="POST" action="{{ url_for('main.toggle_favorite', recipe_id=recipe.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <button class="button button-secondary" type="submit">{{ "★ Favorited" if is_favorite else "☆ Add to favorites" }}</button>
     </form>
     {% endif %}
