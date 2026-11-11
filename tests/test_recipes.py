@@ -58,3 +58,44 @@ def test_empty_search_shows_every_recipe(client):
 def test_nav_highlights_current_page(client):
     html = client.get("/recipes").get_data(as_text=True)
     assert 'nav-link active" href="/recipes"' in html
+
+def test_include_needs_every_ingredient(client):
+    html = client.get("/recipes?include=eggs&include=butter").get_data(as_text=True)
+    assert "Simple Scrambled Eggs" in html
+    assert "Garlic Butter Pasta" not in html
+
+def test_exclude_removes_recipes_with_that_ingredient(client):
+    html = client.get("/recipes?exclude=butter").get_data(as_text=True)
+    assert "Avocado Toast" in html
+    assert "Simple Scrambled Eggs" not in html
+    assert "Garlic Butter Pasta" not in html
+
+def test_diet_filter(client):
+    html = client.get("/recipes?diet=vegan").get_data(as_text=True)
+    assert "Avocado Toast" in html
+    assert "Simple Scrambled Eggs" not in html
+
+def test_meal_type_filter(client):
+    html = client.get("/recipes?meal=breakfast").get_data(as_text=True)
+    assert "Simple Scrambled Eggs" in html
+    assert "Avocado Toast" in html
+    assert "Garlic Butter Pasta" not in html
+
+def test_filters_combine(client):
+    html = client.get("/recipes?include=salt&exclude=milk&meal=breakfast&diet=vegetarian").get_data(as_text=True)
+    assert "Avocado Toast" in html
+    assert "Simple Scrambled Eggs" not in html
+    assert "Garlic Butter Pasta" not in html
+
+def test_filters_with_no_match_show_message(client):
+    html = client.get("/recipes?diet=vegan&meal=dessert").get_data(as_text=True)
+    assert "Your search has no matches" in html
+
+def test_ingredient_match_keeps_real_ingredients(client):
+    assert client.get("/ingredients/match?name=butter").get_json() == {"name": "butter"}
+
+def test_ingredient_match_fixes_spelling(client):
+    assert client.get("/ingredients/match?name=garlicss").get_json() == {"name": "garlic"}
+
+def test_ingredient_match_rejects_unknown_ingredients(client):
+    assert client.get("/ingredients/match?name=xyzzy").get_json() == {"name": None}

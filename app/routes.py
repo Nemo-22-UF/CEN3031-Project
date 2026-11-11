@@ -1,5 +1,5 @@
 from flask import Blueprint, abort, redirect, render_template, request, url_for
-from app.recipes import get_all_recipes, get_recipe, search_recipes
+from app.recipes import filter_recipes, get_recipe, match_ingredient
 from app.servings import (
     MAX_SERVINGS,
     MIN_SERVINGS,
@@ -29,14 +29,34 @@ def health():
     return {"status": "ok"}
 
 
+def clean_list(values):
+    """Drop blank entries and extra spaces from a list of form values."""
+    return [value.strip() for value in values if value.strip()]
+
+
 @main.route("/recipes")
 def recipes():
     query = request.args.get("q", "").strip()
-    if query:
-        found = search_recipes(query)
-    else:
-        found = get_all_recipes()
-    return render_template("recipes.html", recipes=found, query=query)
+    include = clean_list(request.args.getlist("include"))
+    exclude = clean_list(request.args.getlist("exclude"))
+    diets = request.args.getlist("diet")
+    meal_type = request.args.get("meal", "")
+
+    found = filter_recipes(query, include, exclude, diets, meal_type)
+    return render_template(
+        "recipes.html",
+        recipes=found,
+        query=query,
+        include=include,
+        exclude=exclude,
+        diets=diets,
+        meal_type=meal_type,
+    )
+
+
+@main.route("/ingredients/match")
+def ingredient_match():
+    return {"name": match_ingredient(request.args.get("name", ""))}
 
 
 @main.route("/recipes/<int:recipe_id>")
