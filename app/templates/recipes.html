@@ -7,9 +7,51 @@
     <h1>Recipes</h1>
     <p class="recipes-intro">Pick a recipe and we'll walk you through it step by step.</p>
 
-    <form class="search-form" action="{{ url_for('main.recipes') }}" method="get">
-        <input type="search" name="q" value="{{ query }}" placeholder="Search recipes by name" aria-label="Search recipes by name">
-        <button class="button" type="submit">Search</button>
+    {% macro chip(field, value) %}
+    <span class="chip">{{ value }}<input type="hidden" name="{{ field }}" value="{{ value }}"><button type="button" class="chip-remove" aria-label="Remove {{ value }}">×</button></span>
+    {% endmacro %}
+
+    <form action="{{ url_for('main.recipes') }}" method="get">
+        <div class="search-form">
+            <input type="search" name="q" value="{{ query }}" placeholder="Search recipes by name" aria-label="Search recipes by name">
+            <button class="button" type="submit">Search</button>
+        </div>
+
+        <details class="filters" {% if include or exclude or diets or meal_type %}open{% endif %}>
+            <summary>Filters</summary>
+
+            <div class="filter-group">
+                <label for="include-input">Must include</label>
+                <input id="include-input" type="text" data-chip-name="include" data-match-url="{{ url_for('main.ingredient_match') }}" placeholder="Type an ingredient, press Enter">
+                <p class="chip-message"></p>
+                <div class="chips">{% for ingredient in include %}{{ chip("include", ingredient) }}{% endfor %}</div>
+            </div>
+
+            <div class="filter-group">
+                <label for="exclude-input">Leave out</label>
+                <input id="exclude-input" type="text" data-chip-name="exclude" data-match-url="{{ url_for('main.ingredient_match') }}" placeholder="Type an ingredient, press Enter">
+                <p class="chip-message"></p>
+                <div class="chips">{% for ingredient in exclude %}{{ chip("exclude", ingredient) }}{% endfor %}</div>
+            </div>
+
+            <fieldset class="filter-group">
+                <legend>Diet</legend>
+                <label class="diet-option"><input type="checkbox" name="diet" value="vegetarian" {% if "vegetarian" in diets %}checked{% endif %}> 🥕 Vegetarian</label>
+                <label class="diet-option"><input type="checkbox" name="diet" value="vegan" {% if "vegan" in diets %}checked{% endif %}> 🌱 Vegan</label>
+            </fieldset>
+
+            <div class="filter-group">
+                <label for="meal-select">Meal type</label>
+                <select id="meal-select" name="meal">
+                    <option value="">Any</option>
+                    {% for meal in ["breakfast", "starter", "main", "side", "dessert"] %}
+                    <option value="{{ meal }}" {% if meal == meal_type %}selected{% endif %}>{{ meal | capitalize }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button class="button" type="submit">Apply filters</button>
+        </details>
     </form>
 
     {% if recipes %}
@@ -28,7 +70,7 @@
         </li>
         {% endfor %}
     </ul>
-    {% elif query %}
+    {% elif query or include or exclude or diets or meal_type %}
     <p class="no-results">Your search has no matches in our recipe database. Here is our <a href="{{ url_for('main.recipes') }}">full recipe list</a>. If you still cannot find your recipe, contact us at <a href="mailto:thomasheeps10@gmail.com">thomasheeps10@gmail.com</a> with your recipe and we will add it!</p>
     {% else %}
     <p>No recipes yet.</p>

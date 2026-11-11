@@ -102,6 +102,64 @@ body{
     font-size: 0.9rem;
     cursor: pointer;
 }
+/* Recipe filters */
+.filters{
+    margin-bottom: 1.5rem;
+}
+.filters summary{
+    cursor: pointer;
+    font-weight: 600;
+}
+.filter-group{
+    margin: 1rem 0;
+    padding: 0;
+    border: none;
+}
+.filter-group > label,
+.filter-group legend{
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+.filter-group input[type="text"],
+.filter-group select{
+    width: 100%;
+    max-width: 20rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+.diet-option{
+    margin-right: 1rem;
+}
+.chip-message{
+    margin: 0.4rem 0 0;
+    color: #555;
+    font-size: 0.85rem;
+}
+.chips{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+.chip{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.4rem 0.25rem 0.75rem;
+    border-radius: 0.4rem;
+    background: #e8f3ec;
+    color: #2f7d4f;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+.chip-remove{
+    border: none;
+    background: none;
+    color: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+}
 .servings-error{
     margin: 0.5rem 0 0;
     color: #b3261e;

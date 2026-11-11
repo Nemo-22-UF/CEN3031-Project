@@ -7,16 +7,20 @@ SAMPLE_RECIPES are loaded into an empty database on startup, so the app has
 something to show before anyone runs the TheMealDB importer.
 """
 
+import re
+from difflib import get_close_matches
+
 from sqlalchemy.exc import IntegrityError
 
 from app import db
-from app.models import CookingStep, Ingredient, Recipe, RecipeIngredient
+from app.models import CookingStep, Ingredient, Recipe, RecipeIngredient, Tag
 
 SAMPLE_RECIPES = {
     1: {
         "id": 1,
         "title": "Simple Scrambled Eggs",
         "base_servings": 1,
+        "tags": ["breakfast", "vegetarian"],
         "ingredients": [
             {"quantity": 2, "unit": "", "name": "eggs"},
             {"quantity": 1, "unit": "tbsp", "name": "butter"},
@@ -36,6 +40,7 @@ SAMPLE_RECIPES = {
         "id": 2,
         "title": "Garlic Butter Pasta",
         "base_servings": 2,
+        "tags": ["main", "vegetarian"],
         "ingredients": [
             {"quantity": 200, "unit": "g", "name": "spaghetti"},
             {"quantity": 3, "unit": "tbsp", "name": "butter"},
@@ -55,6 +60,7 @@ SAMPLE_RECIPES = {
         "id": 3,
         "title": "Avocado Toast",
         "base_servings": 1,
+        "tags": ["breakfast", "vegan", "vegetarian"],
         "ingredients": [
             {"quantity": 1, "unit": "slice", "name": "bread"},
             {"quantity": 1, "unit": "", "name": "ripe avocado"},
@@ -96,10 +102,42 @@ def get_all_recipes():
     return [recipe_to_dict(recipe) for recipe in Recipe.query.order_by(Recipe.id).all()]
 
 
-def search_recipes(query):
-    """Return recipes whose name contains the query, ignoring case."""
-    matches = Recipe.query.filter(Recipe.name.ilike(f"%{query}%")).order_by(Recipe.id).all()
-    return [recipe_to_dict(recipe) for recipe in matches]
+def ingredient_matches(name):
+    """Database condition: the recipe has an ingredient whose name contains this text."""
+    return Recipe.ingredients.any(RecipeIngredient.ingredient.has(Ingredient.name.ilike(f"%{name}%")))
+
+
+def match_ingredient(text):
+    """Return the ingredient closest to what the user typed, or None.
+
+    Text found inside a real ingredient name is kept as typed. Otherwise the
+    closest spelling is used, so "garlicss" becomes "garlic".
+    """
+    text = text.strip().lower()
+    if not text:
+        return None
+    names = [ingredient.name.lower() for ingredient in Ingredient.query.all()]
+    if any(text in name for name in names):
+        return text
+    words = {word for name in names for word in re.findall(r"[a-z]+", name)}
+    matches = get_close_matches(text, names + list(words), n=1)
+    return matches[0] if matches else None
+
+
+def filter_recipes(name="", include=(), exclude=(), diets=(), meal_type=""):
+    """Return recipes that match every filter given. Empty filters are skipped."""
+    query = Recipe.query
+    if name:
+        query = query.filter(Recipe.name.ilike(f"%{name}%"))
+    for ingredient in include:
+        query = query.filter(ingredient_matches(ingredient))
+    for ingredient in exclude:
+        query = query.filter(~ingredient_matches(ingredient))
+    for diet in diets:
+        query = query.filter(Recipe.tags.any(Tag.name == diet))
+    if meal_type:
+        query = query.filter(Recipe.tags.any(Tag.name == meal_type))
+    return [recipe_to_dict(recipe) for recipe in query.order_by(Recipe.id).all()]
 
 
 def seed_sample_recipes():
@@ -108,8 +146,10 @@ def seed_sample_recipes():
         return
 
     ingredients = {item.name: item for item in Ingredient.query.all()}
+    tags = {tag.name: tag for tag in Tag.query.all()}
     for sample in SAMPLE_RECIPES.values():
         recipe = Recipe(id=sample["id"], name=sample["title"], base_servings=sample["base_servings"])
+        recipe.tags = [tags.setdefault(tag, Tag(name=tag)) for tag in sample["tags"]]
         for item in sample["ingredients"]:
             ingredient = ingredients.setdefault(item["name"], Ingredient(name=item["name"]))
             recipe.ingredients.append(RecipeIngredient(ingredient=ingredient, quantity=item["quantity"], unit=item["unit"]))
