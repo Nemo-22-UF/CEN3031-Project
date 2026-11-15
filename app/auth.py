@@ -3,12 +3,12 @@ from functools import wraps
 import re
 
 import click
-from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
+from flask import Blueprint, abort, current_app, flash, redirect, render_template, request, url_for
 from flask.cli import with_appcontext
 from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy import func
 
-from app import db, login_manager
+from app import db, limiter, login_manager
 from app.models import User
 
 auth = Blueprint("auth", __name__)
@@ -40,7 +40,27 @@ def safe_next(target):
     return url_for("auth.profile")
 
 
+@auth.app_errorhandler(429)
+def too_many_attempts(error):
+    if request.endpoint != "auth.login":
+        return error
+    return render_template(
+        "login.html",
+        error="Too many failed attempts. Wait a minute and try again.",
+        username=request.form.get("username", "").strip(),
+    ), 429
+
+
+def login_limit():
+    return current_app.config.get("LOGIN_ATTEMPT_LIMIT", "5 per minute")
+
+
 @auth.route("/login", methods=["GET", "POST"])
+@limiter.limit(
+    login_limit,
+    methods=["POST"],
+    deduct_when=lambda response: response.status_code != 302,
+)
 def login():
     if current_user.is_authenticated:
         return redirect(url_for("auth.profile"))
