@@ -142,8 +142,34 @@ body{
     border-color: #2f7d4f;
     transform: translateY(-2px);
 }
+.recipe-grid-item{
+    position: relative;
+}
+.card-favorite-form{
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    margin: 0;
+}
+.card-favorite{
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 2px solid #e5e5e5;
+    border-radius: 50%;
+    background: #fff;
+    color: #999;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+}
+.card-favorite:hover,
+.card-favorite.is-favorite{
+    color: #e0a800;
+    border-color: #e0a800;
+}
 .recipe-card-title{
     margin: 0;
+    padding-right: 2.5rem;
     font-size: 1.25rem;
 }
 .recipe-card-cta{
