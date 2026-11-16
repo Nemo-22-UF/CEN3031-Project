@@ -62,6 +62,9 @@ def create_app(config_class=Config):
     app.register_blueprint(auth)
     app.cli.add_command(create_user_command)
 
+    from app.admin import admin
+    app.register_blueprint(admin)
+
     from app.importer import import_recipes_command
     app.cli.add_command(import_recipes_command)
 
