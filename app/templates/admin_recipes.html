@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Manage recipes{% endblock %}
+
+{% block content %}
+<section class="admin">
+    <h1>Manage recipes</h1>
+    <a class="button" href="{{ url_for('admin.new_recipe') }}">Add a recipe</a>
+
+    {% if recipes %}
+    <ul class="admin-list">
+        {% for recipe in recipes %}
+        <li>
+            <a href="{{ url_for('main.recipe_detail', recipe_id=recipe.id) }}">{{ recipe.name }}</a>
+            <span class="admin-actions">
+                <a href="{{ url_for('admin.edit_recipe', recipe_id=recipe.id) }}">Edit</a>
+                <a href="{{ url_for('admin.confirm_delete', recipe_id=recipe.id) }}">Delete</a>
+            </span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No recipes yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

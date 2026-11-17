@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Delete {{ recipe.name }}{% endblock %}
+
+{% block content %}
+<section class="admin">
+    <h1>Delete {{ recipe.name }}?</h1>
+    <p>This also removes it from everyone's favorites and cooking history. It can't be undone.</p>
+
+    <form method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="button button-danger" type="submit">Yes, delete it</button>
+        <a class="button button-secondary" href="{{ url_for('admin.recipe_list') }}">Cancel</a>
+    </form>
+</section>
+{% endblock %}
