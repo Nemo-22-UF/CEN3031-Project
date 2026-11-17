@@ -84,3 +84,16 @@ def get_favorites(user_id):
 
 def get_completions(user_id):
     return Completion.query.filter_by(user_id=user_id).all()
+
+class RecipeProgress(db.Model):
+    __tablename__ = "user_recipe_progress"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey("recipe.id"), nullable=False)
+    current_step = db.Column(db.Integer, nullable=False, default=1)
+    stars = db.Column(db.Integer, nullable=True)  
+    updated_at = db.Column(db.DateTime, nullable=False, server_default=db.func.now(), onupdate=db.func.now())
+    status = db.Column(db.String(20), nullable=False, default="Started") 
+    __table_args__ = (
+        db.UniqueConstraint("user_id", "recipe_id"),
+    )

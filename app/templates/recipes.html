@@ -22,6 +22,9 @@
                     <span class="badge">{{ recipe.steps | length }} step{{ "s" if recipe.steps | length != 1 }}</span>
                     <span class="badge">{{ recipe.ingredients | length }} ingredient{{ "s" if recipe.ingredients | length != 1 }}</span>
                     <span class="badge">Serves {{ recipe.base_servings }}</span>
+                    {% if current_user.is_authenticated and recipe.id in progress_status %}
+                        <span class="badge">Status: {{ progress_status[recipe.id] | capitalize }}</span>
+                    {% endif %}
                 </div>
                 <span class="recipe-card-cta">View recipe →</span>
             </a>
