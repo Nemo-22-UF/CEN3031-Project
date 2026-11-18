@@ -7,6 +7,18 @@
     <h1>Your profile</h1>
     <p>Signed in as <strong>{{ current_user.username }}</strong>{% if current_user.is_admin %} (admin){% endif %}.</p>
 
+    <div class="level-card">
+        <div class="level-badge">{{ level.level }}</div>
+        <div class="level-body">
+            <p class="level-title"><strong>Level {{ level.level }}</strong> · {{ level.title }}</p>
+            <progress class="level-bar" value="{{ level.progress }}" max="100"></progress>
+            <p class="level-next">{{ level.xp }} XP · {{ level.xp_to_next }} XP to level {{ level.level + 1 }}</p>
+        </div>
+        {% if level.streak %}
+        <div class="level-streak">🔥 {{ level.streak }} day{{ "s" if level.streak != 1 }}</div>
+        {% endif %}
+    </div>
+
     <form method="post" action="{{ url_for('auth.logout') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <button class="button button-secondary" type="submit">Log out</button>

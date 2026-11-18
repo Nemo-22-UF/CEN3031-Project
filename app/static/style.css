@@ -525,3 +525,64 @@ button.button{
         margin: 1rem 0;
     }
 }
+.level-card{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.25rem 0;
+    padding: 1rem;
+    border: 2px solid #e5e5e5;
+    border-bottom-width: 4px;
+    border-radius: 1rem;
+}
+.level-badge{
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 999px;
+    background: #2f7d4f;
+    color: #fff;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+.level-body{
+    flex: 1;
+    min-width: 0;
+}
+.level-title,
+.level-next{
+    margin: 0;
+}
+.level-next{
+    font-size: 0.85rem;
+    color: #555;
+}
+.level-bar{
+    width: 100%;
+    height: 0.75rem;
+    margin: 0.4rem 0;
+    border: none;
+    border-radius: 999px;
+    background: #e5e5e5;
+    overflow: hidden;
+    appearance: none;
+}
+.level-bar::-webkit-progress-bar{
+    background: #e5e5e5;
+}
+.level-bar::-webkit-progress-value{
+    background: #e0a800;
+    border-radius: 999px;
+}
+.level-bar::-moz-progress-bar{
+    background: #e0a800;
+    border-radius: 999px;
+}
+.level-streak{
+    flex: none;
+    font-weight: 600;
+    white-space: nowrap;
+}

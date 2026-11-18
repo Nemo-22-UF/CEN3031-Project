@@ -10,6 +10,7 @@ from sqlalchemy import func
 
 from app import db, limiter, login_manager
 from app.models import User
+from app.levels import level_info
 
 auth = Blueprint("auth", __name__)
 
@@ -137,7 +138,7 @@ def logout():
 @auth.route("/profile")
 @login_required
 def profile():
-    return render_template("profile.html")
+    return render_template("profile.html", level=level_info(current_user.id))
 
 
 @auth.route("/admin")
