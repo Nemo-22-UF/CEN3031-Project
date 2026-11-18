@@ -41,7 +41,7 @@ def test_valid_login_goes_to_profile(app, client):
     assert response.headers["Location"].endswith("/profile")
 
     html = client.get("/profile").get_data(as_text=True)
-    assert "Signed in as <strong>maria</strong>" in html
+    assert "<h1>maria" in html
     assert "Log out" in html
 
 

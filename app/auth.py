@@ -10,6 +10,16 @@ from sqlalchemy import func
 
 from app import db, limiter, login_manager
 from app.models import User
+from app.profiles import (
+    AVATARS,
+    MAX_BIO_LENGTH,
+    TOP_FAVORITES,
+    favorite_recipes,
+    profile_error,
+    profile_stats,
+    save_profile,
+    top_favorites,
+)
 
 auth = Blueprint("auth", __name__)
 
@@ -134,10 +144,65 @@ def logout():
     return redirect(url_for("main.index"))
 
 
+def render_profile(user):
+    return render_template(
+        "profile.html",
+        user=user,
+        is_me=current_user.is_authenticated and current_user.id == user.id,
+        stats=profile_stats(user.id),
+        top_recipes=top_favorites(user.id),
+    )
+
+
 @auth.route("/profile")
 @login_required
 def profile():
-    return render_template("profile.html")
+    return render_profile(current_user)
+
+
+@auth.route("/cooks/<username>")
+def public_profile(username):
+    user = User.query.filter(func.lower(User.username) == username.lower()).first_or_404()
+    return render_profile(user)
+
+
+def parse_recipe_id(value):
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+@auth.route("/profile/edit", methods=["GET", "POST"])
+@login_required
+def edit_profile():
+    favorites = favorite_recipes(current_user.id)
+    bio = current_user.bio
+    avatar = current_user.avatar
+    top_ids = [recipe["id"] for recipe in top_favorites(current_user.id)]
+    top_ids += [None] * (TOP_FAVORITES - len(top_ids))
+    error = None
+
+    if request.method == "POST":
+        bio = request.form.get("bio", "").strip()
+        avatar = request.form.get("avatar", "")
+        top_ids = [parse_recipe_id(request.form.get(f"top{rank}")) for rank in range(1, TOP_FAVORITES + 1)]
+        error = profile_error(bio, avatar, top_ids, {favorite.recipe_id for favorite, _ in favorites})
+        if error is None:
+            save_profile(current_user, bio, avatar, top_ids)
+            flash("Profile updated.")
+            return redirect(url_for("auth.profile"))
+
+    return render_template(
+        "profile_edit.html",
+        favorites=[recipe for _, recipe in favorites],
+        avatars=AVATARS,
+        bio=bio,
+        avatar=avatar,
+        top_ids=top_ids,
+        max_bio_length=MAX_BIO_LENGTH,
+        error=error,
+    ), (400 if error else 200)
 
 
 @auth.route("/admin")

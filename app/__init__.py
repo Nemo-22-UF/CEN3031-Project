@@ -55,6 +55,9 @@ def create_app(config_class=Config):
             from app.recipes import seed_sample_recipes
             seed_sample_recipes()
 
+    from app.profiles import avatar_emoji
+    app.jinja_env.globals["avatar_emoji"] = avatar_emoji
+
     from app.routes import main
     app.register_blueprint(main)
 
