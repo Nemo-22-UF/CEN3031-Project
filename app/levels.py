@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 from app.models import Completion
 
 XP_PER_COOK = 10
@@ -17,9 +18,15 @@ def title_for_level(level):
 def total_xp(completions):
     unique_recipes= {c.recipe_id for c in completions}
     return XP_PER_COOK * len(completions) + XP_NEW_RECIPE * len(unique_recipes)
+STREAK_TIMEZONE = ZoneInfo("America/New_York")
+def local_day(moment):
+    if moment.tzinfo is None:
+        moment = moment.replace(tzinfo=timezone.utc)
+    return moment.astimezone(STREAK_TIMEZONE).date()
+
 def cooking_streak(completions, today=None):
-    today= today or datetime.now(timezone.utc).date()
-    days= {c.completed_at.date() for c in completions}
+    today = today or datetime.now(STREAK_TIMEZONE).date()
+    days = {local_day(c.completed_at) for c in completions}
     day = today if today in days else today - timedelta(days=1)
     streak = 0
     while day in days:
