@@ -11,10 +11,8 @@ from app.servings import (
 from flask_login import current_user, login_required
 from app import db
 import secrets
-from flask_login import current_user, login_required
 from sqlalchemy.exc import IntegrityError
-from app import db
-from app.models import Completion, Favorite, get_favorites
+from app.models import Completion, Favorite, get_favorites, RecipeProgress
 
 main = Blueprint("main", __name__)
 
@@ -39,8 +37,11 @@ def recipes():
     favorite_ids = set()
     if current_user.is_authenticated:
         favorite_ids = {favorite.recipe_id for favorite in get_favorites(current_user.id)}
-    return render_template("recipes.html", recipes=found, query=query, favorite_ids=favorite_ids)
-
+    progress_status = {}
+    if current_user.is_authenticated:
+        progress_records = RecipeProgress.query.filter_by(user_id=current_user.id).all()
+        progress_status = {record.recipe_id: record.status for record in progress_records}
+    return render_template("recipes.html", recipes=found, query=query,favorite_ids = favorite_ids, progress_status = progress_status)
 
 @main.route("/recipes/<int:recipe_id>")
 def recipe_detail(recipe_id):
@@ -64,18 +65,23 @@ def cook(recipe_id):
     recipe = get_recipe(recipe_id)
     if recipe is None:
         abort(404)
-
     total_steps = len(recipe["steps"])
     step = request.args.get("step", default=1, type=int)
     servings, servings_error = parse_servings(request.args.get("servings"), recipe["base_servings"])
-
-    # Keep the step in range so a bad or old link still lands on a real step.
     if step < 1 or step > total_steps:
         clamped = min(max(step, 1), total_steps)
         return redirect(url_for("main.cook", recipe_id=recipe_id, step=clamped, servings=servings))
-
     ingredients = scale_ingredients(recipe["ingredients"], recipe["base_servings"], servings)
     token = secrets.token_hex(16)
+    if current_user.is_authenticated:
+        progress = RecipeProgress.query.filter_by(user_id=current_user.id, recipe_id=recipe_id).first()
+        if not progress:
+            progress = RecipeProgress(user_id=current_user.id, recipe_id=recipe_id, current_step=step)
+            db.session.add(progress)
+        else:
+            progress.current_step = step
+        progress.status= "started"
+        db.session.commit()
     return render_template(
         "cook.html",
         recipe=recipe,
@@ -98,6 +104,14 @@ def cook_complete(recipe_id):
     recipe = get_recipe(recipe_id)
     if recipe is None:
         abort(404)
+    if current_user.is_authenticated:
+        progress = RecipeProgress.query.filter_by(user_id=current_user.id, recipe_id=recipe_id).first()
+        if progress is None:
+            progress = RecipeProgress(user_id=current_user.id, recipe_id=recipe_id, current_step=len(recipe["steps"]))
+            db.session.add(progress)
+        progress.status = "finished"
+        progress.current_step = len(recipe["steps"])
+        db.session.commit()
     return render_template("cook_complete.html", recipe=recipe)
 
 @main.route("/recipes/<int:recipe_id>/cook/save", methods=["POST"])
